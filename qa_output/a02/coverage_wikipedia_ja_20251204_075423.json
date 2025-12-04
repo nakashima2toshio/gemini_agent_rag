@@ -1,0 +1,222 @@
+{
+  "coverage_rate": 1.0,
+  "covered_chunks": 32,
+  "total_chunks": 32,
+  "uncovered_chunks": [],
+  "max_similarities": [
+    0.90448807345906,
+    0.8646419579867657,
+    0.8021307326828481,
+    0.8085079445816543,
+    0.8565654459053319,
+    0.7930983285042348,
+    0.8721612781337055,
+    0.8970111440877344,
+    0.8065823978901037,
+    0.8177368043301819,
+    0.7945203826158573,
+    0.8448907786915989,
+    0.8127007257035616,
+    0.8124383968259206,
+    0.8578875847751535,
+    0.7715245184640928,
+    0.8050325819006485,
+    0.8080825933792837,
+    0.813376114913305,
+    0.8879827662936883,
+    0.8402937906265981,
+    0.9287410371559193,
+    0.8079554764084637,
+    0.8130717110699457,
+    0.7803735930158812,
+    0.8423407816002045,
+    0.7978140924161103,
+    0.8306158976235498,
+    0.8722309354700859,
+    0.8481723399299779,
+    0.830729827662658,
+    0.8307761808056762
+  ],
+  "threshold": 0.58,
+  "multi_threshold": {
+    "strict": {
+      "threshold": 0.85,
+      "covered_chunks": 9,
+      "coverage_rate": 0.28125,
+      "uncovered_count": 23,
+      "uncovered_chunks": [
+        {
+          "chunk_id": "wikipedia_ja_0_アンパサンド_chunk_2",
+          "similarity": 0.8021307326828481,
+          "gap": 0.04786926731715191
+        },
+        {
+          "chunk_id": "wikipedia_ja_0_アンパサンド_chunk_3",
+          "similarity": 0.8085079445816543,
+          "gap": 0.041492055418345664
+        },
+        {
+          "chunk_id": "wikipedia_ja_0_アンパサンド_chunk_5",
+          "similarity": 0.7930983285042348,
+          "gap": 0.056901671495765194
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_2",
+          "similarity": 0.8065823978901037,
+          "gap": 0.043417602109896314
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_3",
+          "similarity": 0.8177368043301819,
+          "gap": 0.03226319566981806
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_4",
+          "similarity": 0.7945203826158573,
+          "gap": 0.05547961738414264
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_5",
+          "similarity": 0.8448907786915989,
+          "gap": 0.00510922130840108
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_6",
+          "similarity": 0.8127007257035616,
+          "gap": 0.03729927429643842
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_7",
+          "similarity": 0.8124383968259206,
+          "gap": 0.037561603174079417
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_9",
+          "similarity": 0.7715245184640928,
+          "gap": 0.07847548153590722
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_10",
+          "similarity": 0.8050325819006485,
+          "gap": 0.04496741809935145
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_11",
+          "similarity": 0.8080825933792837,
+          "gap": 0.0419174066207163
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_12",
+          "similarity": 0.813376114913305,
+          "gap": 0.03662388508669501
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_14",
+          "similarity": 0.8402937906265981,
+          "gap": 0.00970620937340183
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_16",
+          "similarity": 0.8079554764084637,
+          "gap": 0.04204452359153632
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_17",
+          "similarity": 0.8130717110699457,
+          "gap": 0.03692828893005429
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_18",
+          "similarity": 0.7803735930158812,
+          "gap": 0.06962640698411882
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_19",
+          "similarity": 0.8423407816002045,
+          "gap": 0.007659218399795442
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_20",
+          "similarity": 0.7978140924161103,
+          "gap": 0.052185907583889635
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_21",
+          "similarity": 0.8306158976235498,
+          "gap": 0.019384102376450163
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_23",
+          "similarity": 0.8481723399299779,
+          "gap": 0.001827660070022108
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_24",
+          "similarity": 0.830729827662658,
+          "gap": 0.019270172337341962
+        },
+        {
+          "chunk_id": "wikipedia_ja_1_言語_chunk_25",
+          "similarity": 0.8307761808056762,
+          "gap": 0.01922381919432381
+        }
+      ]
+    },
+    "standard": {
+      "threshold": 0.75,
+      "covered_chunks": 32,
+      "coverage_rate": 1.0,
+      "uncovered_count": 0,
+      "uncovered_chunks": []
+    },
+    "lenient": {
+      "threshold": 0.65,
+      "covered_chunks": 32,
+      "coverage_rate": 1.0,
+      "uncovered_count": 0,
+      "uncovered_chunks": []
+    }
+  },
+  "chunk_analysis": {
+    "by_length": {
+      "long": {
+        "count": 32,
+        "covered": 32,
+        "avg_similarity": 0.8329523817159313,
+        "coverage_rate": 1.0
+      }
+    },
+    "by_position": {
+      "beginning": {
+        "count": 11,
+        "covered": 11,
+        "avg_similarity": 0.8379494991070434,
+        "coverage_rate": 1.0
+      },
+      "middle": {
+        "count": 11,
+        "covered": 11,
+        "avg_similarity": 0.8348137171572518,
+        "coverage_rate": 1.0
+      },
+      "end": {
+        "count": 10,
+        "covered": 10,
+        "avg_similarity": 0.8254080836002554,
+        "coverage_rate": 1.0
+      }
+    },
+    "summary": {
+      "total_chunks": 32,
+      "total_qa_pairs": 128,
+      "threshold_used": 0.58,
+      "insights": []
+    }
+  },
+  "dataset_type": "wikipedia_ja",
+  "optimal_thresholds": {
+    "strict": 0.85,
+    "standard": 0.75,
+    "lenient": 0.65
+  }
+}

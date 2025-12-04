@@ -1,0 +1,8 @@
+question,answer,question_type,source_chunk_id,doc_id,dataset_type,chunk_idx,provider
+なぜ遠出をしなかったのですか？,午後から雨が降る心配があったため、遠出を避けました。,reason,japanese_text_0_chunk_0,japanese_text_0,japanese_text,0,gemini
+圏央道を越えると何が見えてきますか？,お世話になっているボウリング場が見えてきます。,fact,japanese_text_1_chunk_0,japanese_text_1,japanese_text,0,gemini
+春が近づいていることをどのように感じましたか？,肌で感じることができました。,fact,japanese_text_1_chunk_0,japanese_text_1,japanese_text,0,gemini
+なぜ予定を変更してケンタッキーフライドチキン (ケンタ) に行ったのですか？,途中でトイレに行きたくなったため、通り道にあったケンタッキーフライドチキンに変更しました。,reason,japanese_text_2_chunk_0,japanese_text_2,japanese_text,0,gemini
+エルモサの右目に斑点が見つかったのはいつ頃ですか？,約1年前に、エルモサの右目の黒目の端に小さな斑点が見つかりました。,fact,japanese_text_3_chunk_0,japanese_text_3,japanese_text,0,gemini
+エルモサの右目の斑点はどのような状態でしたか？,注意深く見ないと分からないほどの小さな斑点でした。,fact,japanese_text_3_chunk_0,japanese_text_3,japanese_text,0,gemini
+先生から診断された可能性のある病名は何ですか？,角膜ジストロフィーであると診断された可能性があります。,fact,japanese_text_4_chunk_0,japanese_text_4,japanese_text,0,gemini

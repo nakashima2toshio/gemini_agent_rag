@@ -1,0 +1,1282 @@
+[
+  {
+    "question": "アンパサンド（&）は何を意味する記号ですか？",
+    "answer": "アンパサンドは、並立助詞「…と…」を意味する記号です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_0",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンド（&）の語源は何ですか？",
+    "answer": "ラテン語で「…と…」を表す接続詞 \"et\" の合字が起源です。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_0",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "英語の学校でアルファベットを復唱する際、\"A\"はどのように唱えられていましたか？",
+    "answer": "\"A per se A\"のように、ラテン語のper se（それ自体）を用いて唱えられていました。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_0",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "アルファベットの復唱の最後が \"X, Y, Z, and per se and\" という形になった理由は何ですか？",
+    "answer": "アルファベットの最後に \"&\" を加え、それがラテン語のetから英語のandと読まれるようになったためです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_0",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "「ampersand」という言葉が英語の一般的な語法となったのはいつですか？",
+    "answer": "1837年までに「ampersand」という言葉は英語の一般的な語法となりました。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_1",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンドの語源俗説では、なぜ「Ampère's and」と呼ばれるようになったとされていますか？",
+    "answer": "アンドレ＝マリ・アンペールが自身の著作でこの記号を使い、それが広く読まれたため、「Ampère's and」と呼ばれるようになったという誤った説があります。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_1",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンドの起源はいつまで遡ることができますか？",
+    "answer": "アンパサンドの起源は1世紀の古ローマ筆記体まで遡ることができます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_1",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "カロリング小文字体に至るラテン文字の変遷の過程で、etの合字はどのように変化しましたか？",
+    "answer": "カロリング小文字体に至る過程で、etの合字は一般に廃れましたが、etの合字は使われ続け、次第に元の文字がわかりにくい字形に変化していきました。",
+    "question_type": "process",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_1",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "現代のイタリック体のアンパサンドは、何にさかのぼりますか？",
+    "answer": "ルネサンス期に発展した筆記体での et の合字にさかのぼります。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_2",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "印刷技術の発明後、印刷業者はアンパサンドをどのように使用しましたか？",
+    "answer": "イタリック体とローマ筆記体のアンパサンドの両方を多用するようになりました。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_2",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンドがラテンアルファベットを使用する多くの言語で使用されるようになった理由は何ですか？",
+    "answer": "アンパサンドのルーツがローマ時代にさかのぼるためです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_2",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "19世紀のアメリカでは、子供達にアンパサンドについてどのような教育が行われていましたか？",
+    "answer": "アンパサンドはアルファベットの最後の文字だと教えられていました。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_2",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "童謡 Apple Pie ABC の最後の歌詞には、アンパサンドの他に何という文字が含まれていますか？",
+    "answer": "童謡 Apple Pie ABC の最後の歌詞には、アンパサンドの他に X, Y, Z が含まれています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_3",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンドとティロ式記号の et は、それぞれどのようにして生まれたのですか？",
+    "answer": "アンパサンドとティロ式記号の et は、それぞれ独立に発明されたものです。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_3",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "ティロ式記号の et は、古アイルランド語の文字でどのような意味で使用されていましたか？",
+    "answer": "ティロ式記号の et は、古アイルランド語の文字で agus（「…と…」）を表すために使用されていました。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_3",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンドとティロ式記号の et は、意味の点でどのような共通点がありますか？",
+    "answer": "アンパサンドとティロ式記号の et は、どちらもラテン語の et を表すために使用され、「…と…」という意味で共通しています。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_3",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンドがアイルランドに伝わった背景として考えられる影響は何ですか？",
+    "answer": "アイルランドにおけるキリスト教時代初期に、修道院の影響によって書き文字に加えられた可能性があります。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_4",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "日常的な手書きにおけるアンパサンドの簡略化された形は、何に似ていますか？",
+    "answer": "欧米では小文字のイプシロンを大きくしたもの、または数字の3の鏡文字に縦線を加えた形に簡略化されます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_4",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "アンパサンドの代わりに使用されることがある記号は何ですか？",
+    "answer": "くだけた用法として、プラス記号（+）がアンパサンドの代わりに使用されることがあります。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_4",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "ドイツのフラクトゥールで使用された「et」を表す文字と、ギリシア文字で使用された「……と」を意味する合字にはどのような共通点がありますか？",
+    "answer": "どちらも特定の言語や書体において、文字や単語を省略・表現するために用いられる記号であるという共通点があります。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_4",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "C言語において、`A && B` はどのような演算を表しますか？",
+    "answer": "`A && B` は論理 AND を表し、AとBが両方とも真の場合に真を返します。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_5",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "PHPで変数を参照渡しするにはどうすれば良いですか？",
+    "answer": "変数宣言記号($)の直前にアンパサンド(&)を記述することで参照渡しができます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_5",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "BASIC系列の言語では、アンパサンド(&)はどのような演算子として使用されますか？",
+    "answer": "BASIC系列の言語では、アンパサンド(&)は文字列の連結演算子として使用されます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_5",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "SGML、XML、HTMLにおいて、アンパサンドは何に使用されますか？",
+    "answer": "アンパサンドは、SGML実体を参照するために使用されます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_0_アンパサンド_chunk_5",
+    "doc_id": "wikipedia_ja_0_アンパサンド",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "広辞苑における言語の定義は何ですか？",
+    "answer": "広辞苑では、言語は人間が音声や文字を用いて思想・感情・意志などを伝達するために用いる記号体系、およびそれを用いる行為と解説されています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_0",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "大辞泉における言語の定義を説明してください。",
+    "answer": "大辞泉では、言語は音声や文字によって、人の意志・思想・感情などの情報を表現・伝達したり、他者のそれを受け入れ理解するための約束・規則、およびそのような記号の体系と定義されています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_0",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "ソシュールの用語「langue」の日本語訳は何ですか？",
+    "answer": "ソシュールの用語「langue」は、日本語で「言語」と訳されます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_0",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "個別言語とは具体的にどのようなものを指しますか？",
+    "answer": "個別言語とは、特定の集団が用いる音や文字による事態の伝達手段であり、例えば英語、フランス語、日本語などが該当します。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_0",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 0,
+    "provider": "gemini"
+  },
+  {
+    "question": "『日本大百科全書』における「言語」という語の解釈はいくつありますか？",
+    "answer": "『日本大百科全書』では、「言語」という語は多義的に解説されており、大脳に蓄えられた語彙と文法規則の体系、その体系を用いる能力、すべての人間が共有する言語能力、個々の個別言語を指すことがあります。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_1",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "広義の言語には何が含まれますか？",
+    "answer": "広義の言語には、言葉に表すverbalなものと、言葉として表されないnon-verbalなもの（各種記号、アイコン、図形、ボディーランゲージ等）が含まれます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_1",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語が人間の社会的活動や文化的活動を支える理由は何ですか？",
+    "answer": "言語は意志を相互に伝達することや、抽象的な思考を可能にするため、人間の社会的活動や文化的活動を支えます。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_1",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "日常のコミュニケーションで、狭義の言語表現に加えて用いられるものは何ですか？",
+    "answer": "日常のコミュニケーションでは狭義の言語表現に加えて、身振り、手振り、図示、擬音などが用いられることがあります。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_1",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 1,
+    "provider": "gemini"
+  },
+  {
+    "question": "ソシュール以降、「共同体の用いる言語体系」は何と呼ばれるようになったか？",
+    "answer": "「langue (ラング)」と呼ばれるようになった。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_2",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "個々の人が行う言語活動は、ソシュール以降何という用語で呼ばれるようになったか？",
+    "answer": "「parole (パロール)」という用語で呼ばれるようになった。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_2",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "なぜ文字を使う方法と文字を用いない方法の区別のみでは、言語表現を非言語表現から区別できないのか？",
+    "answer": "抽象記号には文字表現と非文字表現が存在するため、文字の有無だけで区別することはできない。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_2",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語の習得は、個人の人格形成にどのような影響を与えるか？",
+    "answer": "共同体で用いられている言語の習得を通じて、その共同体での社会的学習と人格形成がなされる。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_2",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 2,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語表現と区別される文字記号の例として、どのようなものがありますか？",
+    "answer": "化学式H2Oなどが言語表現と区別される文字記号の例です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_3",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "口語、口頭言語、書記言語、文語はどのように分類されますか？",
+    "answer": "これらの分類は重なる部分があり、明確に分類できるものではありません。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_3",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "日本語対応手話と日本手話の違いは何ですか？",
+    "answer": "日本語対応手話は日本語の視覚言語バージョンですが、日本手話は日本語とは異なる言語と考えられています。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_3",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語的表現は、読み上げや点字化によってどのような表現に変換されますか？",
+    "answer": "言語的表現は読み上げによって音声表現に、点字化によって触覚表現に変換されます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_3",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 3,
+    "provider": "gemini"
+  },
+  {
+    "question": "エスペラントは何と呼ばれる言語の一例ですか？",
+    "answer": "エスペラントは人工言語の一例です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_4",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "ジャック・デリダは言語学におけるどのような発想を批判しましたか？",
+    "answer": "彼は「声」を基礎とし文字をその代替とする発想を批判しました。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_4",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "ヘブライ語の復活は、他の死語の復活と何が異なりますか？",
+    "answer": "ヘブライ語は文章語として存続していたものを人工的に日常語として復活させたという点で異なります。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_4",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "民族の滅亡や他言語による吸収以外に、個別言語が使用されなくなる理由は何ですか？",
+    "answer": "テキストからは、民族の滅亡や他言語による吸収以外に個別言語が使用されなくなる理由は特定できません。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_4",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 4,
+    "provider": "gemini"
+  },
+  {
+    "question": "文章語として存続している言語の例を3つ挙げてください。",
+    "answer": "古典アラビア語、ラテン語、古典ギリシア語が文章語として存続している言語の例です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_5",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "危機言語とはどのような言語のことですか？",
+    "answer": "話者数が非常に少なく、他言語に飲み込まれて消滅する危機に瀕している言語のことです。",
+    "question_type": "definition",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_5",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "危機言語が増加している理由は何ですか？",
+    "answer": "世界の一体化が進み、交通網の整備やマスメディアの発達によって、孤立していた小さな言語コミュニティが維持できなくなるためです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_5",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "英語帝国主義とは、言語の危機という視点から見てどのような現象と言えますか？",
+    "answer": "英語帝国主義は、英語の国際語としての勢力伸張による他主要言語の勢力縮小を意味し、言語の多様性が失われる危機の一因と言えます。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_5",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 5,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語消滅はどのような状況で起きやすいですか？",
+    "answer": "隣接した大きな言語集団との交流が不可欠となり、小言語集団がその言語圏に取り込まれることによって起きやすいです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_6",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 6,
+    "provider": "gemini"
+  },
+  {
+    "question": "経済成長と言語消滅の間にはどのような関係がありますか？",
+    "answer": "経済成長と言語消滅との間には有意な相関があるという研究が存在します。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_6",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 6,
+    "provider": "gemini"
+  },
+  {
+    "question": "プープー説とはどのような説ですか？",
+    "answer": "プープー説は、思わず出た声から感情に関する語が出来たという言語起源に関する仮説の一つです。",
+    "question_type": "definition",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_6",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 6,
+    "provider": "gemini"
+  },
+  {
+    "question": "北アメリカやオーストラリアで言語消滅が急速に進んでいる理由は何ですか？",
+    "answer": "人的交流や文化的交流が盛んな先進国内において、言語消滅がより顕著になるためです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_6",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 6,
+    "provider": "gemini"
+  },
+  {
+    "question": "ワンワン説とは、どのような説ですか？",
+    "answer": "動物の鳴き声が語源となって、動物に関する語が生まれたという説です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_7",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 7,
+    "provider": "gemini"
+  },
+  {
+    "question": "ドンドン説では、雷（かみなり）の語源は何とされていますか？",
+    "answer": "雷の音「ピカッ！ゴロゴロ」が語源とされています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_7",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 7,
+    "provider": "gemini"
+  },
+  {
+    "question": "エイヤコーラ説が、集団行動をとる時の意味の無いはやし歌によって裏付けられる理由は何ですか？",
+    "answer": "かけ声から行動に関する語が生まれたというエイヤコーラ説は、集団行動時の意味のないはやし歌が世界各地に残っていることから、その妥当性が支持されます。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_7",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 7,
+    "provider": "gemini"
+  },
+  {
+    "question": "エイヤコーラ説を参考に、もし新しい作業用のかけ声が生まれた場合、どのような言葉が生まれる可能性がありますか？ 具体例を挙げて説明してください。",
+    "answer": "例えば、重いものを持ち上げる際に「ドッコイショ」というかけ声を使った場合、将来的に「ドッコイショ」が「持ち上げる」という意味の動詞になる可能性があります。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_7",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 7,
+    "provider": "gemini"
+  },
+  {
+    "question": "FOXP2遺伝子の変異は、いつ頃生じたと考えられていますか？",
+    "answer": "現生人類とネアンデルタール人が分化する以前の30-40万年前にはすでに生じていたと考えられています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_8",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 8,
+    "provider": "gemini"
+  },
+  {
+    "question": "FOXP2遺伝子の変異が言語能力の獲得に繋がった可能性があるとされていますが、留意すべき点は何ですか？",
+    "answer": "FOXP2は言語能力を持たない他の動物も持っており、変異が言語能力獲得の必要条件である直接的な証明はまだなされていない点です。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_8",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 8,
+    "provider": "gemini"
+  },
+  {
+    "question": "進化が止まった生物の例として挙げられるものは何ですか？",
+    "answer": "進化が止まった生物の例としては、「生きている化石」と呼ばれるものが挙げられます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_8",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 8,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語の起源について、現在分かっていることは何ですか？",
+    "answer": "言語が地球上の一ヶ所で生まれたのか、複数ヶ所で生まれたのかも分かっていません。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_8",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 8,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語が大きく変化する要因は何ですか？",
+    "answer": "侵略、交易、移動など、他民族との接触が多い場合、言語は大きく変化します。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_9",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 9,
+    "provider": "gemini"
+  },
+  {
+    "question": "語族とは何ですか？",
+    "answer": "語族とは、もともといくつかの祖語から分化したと考えられており、同一の祖語から発生した言語グループのことです。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_9",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 9,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語連合とはどのような現象ですか？",
+    "answer": "言語連合とは、地理的・文化的に近接する異なった系統の言語が、相互に影響しあい顕著に類似する事例を指します。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_9",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 9,
+    "provider": "gemini"
+  },
+  {
+    "question": "アイスランド語はどのような点で特殊ですか？",
+    "answer": "アイスランド語は基本文法が1000年前とほとんど変わっておらず、言語変化が少ない代表例です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_9",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 9,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語史を作る場合、どのような要素から分割されるか？",
+    "answer": "単語、綴り、発音、文法等から古代、中世、近代と3分割される。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_10",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 10,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語接触によって発生する現象は何か？",
+    "answer": "言語接触によって、借用語が発生するほか、混成言語が発生することがある。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_10",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 10,
+    "provider": "gemini"
+  },
+  {
+    "question": "ピジン言語とクレオール言語の主な違いは何か？",
+    "answer": "クレオール言語はピジン言語と比べて語彙が多く、体系だった文法が存在する。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_10",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 10,
+    "provider": "gemini"
+  },
+  {
+    "question": "クレオール言語は独立した言語と見なせる理由は何か？",
+    "answer": "クレオール言語は語彙が豊富で、体系的な文法が存在するため、独立した言語として扱える。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_10",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 10,
+    "provider": "gemini"
+  },
+  {
+    "question": "クレオール言語とピジン言語の主な違いは何ですか？",
+    "answer": "クレオール言語は母語話者が存在するのに対し、ピジン言語は母語話者が存在しません。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_11",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 11,
+    "provider": "gemini"
+  },
+  {
+    "question": "中世ヨーロッパにおいて、文章語としてラテン語が用いられたのはなぜですか？",
+    "answer": "当時の文語と日常使用する言語との間に隔たりがあり、ラテン語が知識人の共通語として用いられていたためです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_11",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 11,
+    "provider": "gemini"
+  },
+  {
+    "question": "国民国家の成立において、言語の整備と国内共通語の成立はどのような役割を果たしましたか？",
+    "answer": "言語の整備と国内共通語の成立は、国民国家を成立させるうえでの重要な要素となりました。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_11",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 11,
+    "provider": "gemini"
+  },
+  {
+    "question": "標準語はどのようにして制定されましたか？",
+    "answer": "出版物による自然な成立や、公的な言語統制機関による国家主導など、様々な方法で制定されました。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_11",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 11,
+    "provider": "gemini"
+  },
+  {
+    "question": "標準語の制定は、方言にどのような影響を与えたか？",
+    "answer": "標準語の制定は、他の言語を方言とみなし、言語間に序列を生むことにつながった。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_12",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 12,
+    "provider": "gemini"
+  },
+  {
+    "question": "最も新しい言語として誕生の瞬間が捉えられた言語は？",
+    "answer": "ニカラグアの子供達の間で1970年代後半に発生した「ニカラグア手話」が、最も新しい言語として知られている。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_12",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 12,
+    "provider": "gemini"
+  },
+  {
+    "question": "ニカラグア手話の発見は、言語学においてどのような考え方を裏付けるものとなったか？",
+    "answer": "ニカラグア手話の発見は、言語能力は人間に生得のものであるという考えを裏付けるものとなった。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_12",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 12,
+    "provider": "gemini"
+  },
+  {
+    "question": "世界の言語数を正確に数えることが難しい理由の一つとして、どのような原理的な困難があるか？",
+    "answer": "未発見の言語や消滅しつつある言語が存在することに加え、言語の境界線が曖昧であるという原理的な困難がある。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_12",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 12,
+    "provider": "gemini"
+  },
+  {
+    "question": "旧ユーゴスラビアにおいて、セルビア・クロアチア語はどのように扱われていたか？",
+    "answer": "政治上、国家統一の観点から同一言語として扱われていた。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_13",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 13,
+    "provider": "gemini"
+  },
+  {
+    "question": "ユーゴスラビア崩壊後、なぜセルビア語、クロアチア語、ボスニア語が独立した言語として扱われるようになったのか？",
+    "answer": "ユーゴスラビア崩壊後、独立した各国が各地方の方言をそれぞれ独立言語として扱うようになったため。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_13",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 13,
+    "provider": "gemini"
+  },
+  {
+    "question": "セルビア・クロアチア語とセルビア語、クロアチア語、ボスニア語、モンテネグロ語の違いは何か？",
+    "answer": "セルビア・クロアチア語は学術的な方言連続体であり、後者は政治的な理由で分けられた独立言語である。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_13",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 13,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語の区別が難しい場合、どのような問題が生じるか？",
+    "answer": "ある人間集団を「言語の話者」とするか「方言の話者」とするかの問題が生じる。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_13",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 13,
+    "provider": "gemini"
+  },
+  {
+    "question": "複数中心地言語とはどのような言語ですか？",
+    "answer": "明確な標準語を持たず、複数の言語中心を持つ言語のことです。英語もこれに含まれます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_14",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 14,
+    "provider": "gemini"
+  },
+  {
+    "question": "中国語の方言は、会話が成立しないほど差異があっても、なぜ方言として扱われるのですか？",
+    "answer": "書き言葉が共通であり、中国語群に属していて対応関係が明確であるため、方言として扱われます。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_14",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 14,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語の判定基準としての相互理解性には、どのような限界がありますか？",
+    "answer": "AがBの言うことを理解できても、BがAの言うことを理解できない場合や、言語が地理的に徐々に変化している場合に、分割の基準を決定できないという限界があります。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_14",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 14,
+    "provider": "gemini"
+  },
+  {
+    "question": "ある地域で話されている言語が、隣接する地域で話されている言語と徐々に変化している場合、相互理解性の観点からどのような問題が生じますか？",
+    "answer": "どこで言語を分割すべきか、あるいは分割すべきでないかを決定することが難しくなります。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_14",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 14,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語と方言を区別する際に、単一の基準を押し通す言語学者が現実にはいないのはなぜですか？",
+    "answer": "ある集団を「言語話者」とするか「方言話者」とするかには、政治的・文化的アイデンティティの問題が深く関係しており、地域によって受け入れられる基準が異なるためです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_15",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 15,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語と方言の区別について、現在なされる説明はいくつありますか？",
+    "answer": "言語と方言の区別には言語学的意味はないとするものと、どの方言もそれぞれ言語とした上で、標準語との関係で方言を定義するものの二つです。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_15",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 15,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語と方言の区別に関する二つの説明において、共通する点は何ですか？",
+    "answer": "どちらの説明も「言語と方言の区別に言語学的意味はない」という点を共通認識としています。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_15",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 15,
+    "provider": "gemini"
+  },
+  {
+    "question": "ある地域で、言語と方言を区別する基準について強い反発が起きた場合、言語学はどのような対応を取りますか？",
+    "answer": "言語学は反発が誤りだと言うための論拠を持たないため、結局は慣習に従って、地域ごとに異なる基準を用いて分類することになります。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_15",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 15,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語の方言同士か、独立した言語同士かを判定する上で、何が重要視されているか？",
+    "answer": "言語そのものの性質ではなく、人々がその言語をどう思っているかが重要視される。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_16",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 16,
+    "provider": "gemini"
+  },
+  {
+    "question": "系統関係が異なる言語同士が、共通の集団で話されていても方言同士とはみなされないのはなぜか？",
+    "answer": "言語の系統が異なる場合、たとえ同じ集団で使われていても、言語としてのルーツが異なるため、方言とは区別される。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_16",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 16,
+    "provider": "gemini"
+  },
+  {
+    "question": "西部ユーグ語と東部ユーグ語は、どのような点で異なっているか？",
+    "answer": "西部ユーグ語はテュルク系の言語を、東部ユーグ語はモンゴル系の言語を母語としている点が異なる。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_16",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 16,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語が同じかどうかを判断する際に、文字の使用はどのように考慮されるか？",
+    "answer": "使用する文字は、言語が同じかどうかを判断する基準としては、あまり重要視されない。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_16",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 16,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語が使用する文字の変更や、二種以上の文字の併用は珍しいことですか？",
+    "answer": "いいえ、珍しいことではありません。言語は基本的にどの文字でも表記可能であり、文字は文法などにさほど影響を与えないためです。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_17",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 17,
+    "provider": "gemini"
+  },
+  {
+    "question": "ヒンディー語とウルドゥー語は、どのような関係として扱われることがありますか？",
+    "answer": "ヒンドゥスターニー語として同一言語または方言連続体として扱われることがあります。ただし、ヒンディー語はデーヴァナーガリー文字、ウルドゥー語はウルドゥー文字を使用します。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_17",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 17,
+    "provider": "gemini"
+  },
+  {
+    "question": "『エスノローグ第21版』における母語話者数の統計は、いつ時点の推計に基づいていますか？",
+    "answer": "2021年時点の推計に基づいています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_17",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 17,
+    "provider": "gemini"
+  },
+  {
+    "question": "中国語は母語話者が最も多い言語ですが、世界で広く使用されている言語とは言えないのはなぜですか？",
+    "answer": "中国語を公用語としている国家は中華人民共和国、中華民国、シンガポールの3ヶ国にすぎないため、他の言語と比較して使用国が限られているからです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_17",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 17,
+    "provider": "gemini"
+  },
+  {
+    "question": "上記の資料で話者数2位の言語は何ですか？",
+    "answer": "上記の資料で話者数2位の言語はスペイン語です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_18",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 18,
+    "provider": "gemini"
+  },
+  {
+    "question": "スペイン語が南アメリカおよび北アメリカ南部に広まった理由は何ですか？",
+    "answer": "17世紀のスペインによる新大陸の植民地化が、スペイン語が南アメリカおよび北アメリカ南部に広まった理由です。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_18",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 18,
+    "provider": "gemini"
+  },
+  {
+    "question": "英語は話者人口と公用語として使用されている国数のどちらが多いですか？",
+    "answer": "英語は話者人口では4位ですが、公用語として使用されている国数は55カ国と最も多いです。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_18",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 18,
+    "provider": "gemini"
+  },
+  {
+    "question": "非英語圏の人々が交渉する際に、共通語として英語を使用するのはなぜですか？",
+    "answer": "世界の一体化に伴い研究やビジネスなどが英語で行われる場面が増えており、英語の世界共通語としての影響力が増大しているためです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_18",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 18,
+    "provider": "gemini"
+  },
+  {
+    "question": "17世紀から19世紀にかけて西洋で最も有力な国際語は何でしたか？",
+    "answer": "フランス語が最も有力な国際語でした。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_19",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 19,
+    "provider": "gemini"
+  },
+  {
+    "question": "フランス語を公用語とする国が多い理由は何ですか？",
+    "answer": "アフリカの旧フランス植民地を中心に、フランス語を公用語とする国が多いです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_19",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 19,
+    "provider": "gemini"
+  },
+  {
+    "question": "アラビア語の文語と口語の違いは何ですか？",
+    "answer": "アラビア語は文語であるフスハーと口語であるアーンミーヤに分かれており、アーンミーヤはさらに多数の方言に分かれています。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_19",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 19,
+    "provider": "gemini"
+  },
+  {
+    "question": "国連の公用語にアラビア語が含まれているのはなぜですか？",
+    "answer": "国連の公用語は安全保障理事会の常任理事国の言語に、広大な共通言語圏を持つスペイン語とアラビア語を加えたものです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_19",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 19,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語間の対立が激化すると、どのような問題に発展することがありますか？",
+    "answer": "言語間の対立が激化すると、独立問題に発展し、国家に大きな影響を及ぼすことがあります。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_20",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 20,
+    "provider": "gemini"
+  },
+  {
+    "question": "東パキスタン（バングラデシュ）が独立した理由は何ですか？",
+    "answer": "西パキスタンの言語であるウルドゥー語の公用語化に反発し、ベンガル語を同格の国語とすることを求めたことが独立運動のきっかけとなりました。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_20",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 20,
+    "provider": "gemini"
+  },
+  {
+    "question": "少数派言語話者の不満をなだめるために、どのような政策が用いられることがありますか？",
+    "answer": "言語圏別に大きな自治権を与えたり、国家の公用語を複数制定したりするなどの政策が用いられることがあります。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_20",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 20,
+    "provider": "gemini"
+  },
+  {
+    "question": "ベルギーでは、言語圏に強い自治権を与えるために、どのような制度が設けられていますか？",
+    "answer": "ベルギーでは言語共同体が設立され、フラマン語共同体、フランス語共同体、ドイツ語共同体の3つの言語共同体が併存する連邦国家となっています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_20",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 20,
+    "provider": "gemini"
+  },
+  {
+    "question": "スイスにおける公用語制定の歴史について説明してください。",
+    "answer": "1848年の憲法でドイツ語・フランス語・イタリア語が公用語となり、1938年にはロマンシュ語が国語となりました。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_21",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 21,
+    "provider": "gemini"
+  },
+  {
+    "question": "インドの「言語州」政策とはどのようなものですか？",
+    "answer": "1956年以降、同系統の言語を用いる地域へと州を再編する政策です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_21",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 21,
+    "provider": "gemini"
+  },
+  {
+    "question": "公用語、共通語、民族語は、国家においてどのような構造をなしていますか？",
+    "answer": "一般的に、公用語-共通語-民族語の三層構造からなります。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_21",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 21,
+    "provider": "gemini"
+  },
+  {
+    "question": "日本において、地方の方言と標準語はそれぞれどのような場面で使用されますか？",
+    "answer": "地方の方言は同じ地方のコミュニティ内で、標準語は他地方から来た人を相手にする場合に使用されます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_21",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 21,
+    "provider": "gemini"
+  },
+  {
+    "question": "アフリカ大陸の多くの国で見られる言語構造は何層構造ですか？",
+    "answer": "アフリカ大陸の多くの国では、公用語、共通語、民族語の三層構造が見られます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_22",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 22,
+    "provider": "gemini"
+  },
+  {
+    "question": "アフリカの国々で共通語が公用語化されない理由の一つは何ですか？",
+    "answer": "共通語の公用語化を阻む理由の一つとして、公用語の使用能力がエリート層の権力の源泉となっていることが挙げられます。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_22",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 22,
+    "provider": "gemini"
+  },
+  {
+    "question": "公用語と共通語が分離している国家と分離していない国家の違いは何ですか？",
+    "answer": "公用語と共通語が分離していない国家は二層構造ですが、分離している国家（特にアフリカ諸国）では三層構造が見られます。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_22",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 22,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語の研究において、動物モデルを作りにくいのはなぜですか？",
+    "answer": "言語機能は基本的にヒトに固有のものであるため、言語の研究には少数の例外を除き動物モデルを作りにくいです。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_22",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 22,
+    "provider": "gemini"
+  },
+  {
+    "question": "脳機能イメージング研究はいつ頃から言語研究の手法として用いられるようになったか？",
+    "answer": "1980年代後半より、脳機能イメージング研究が言語研究の手法として加わるようになった。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_23",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 23,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語に関わる脳の領域は、古典的なブローカ領域、ウェルニッケ領域の他に、具体的にどの範囲に及ぶか？",
+    "answer": "シルヴィウス裂を囲む広い範囲（縁上回、角回、一次・二次聴覚野、一次運動野、体性感覚野、左前頭前野、左下側頭回）にわたる。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_23",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 23,
+    "provider": "gemini"
+  },
+  {
+    "question": "ブローカ失語は、脳のどの部分の損傷によって引き起こされるか？",
+    "answer": "ブローカ失語は、左前頭前野付近の損傷によって引き起こされる。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_23",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 23,
+    "provider": "gemini"
+  },
+  {
+    "question": "ブローカ失語の特徴は何か？",
+    "answer": "ブローカ失語は運動失語であり、自発語は非流暢性となり、復唱、書字も障害される。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_23",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 23,
+    "provider": "gemini"
+  },
+  {
+    "question": "ウェルニッケ失語は、脳のどの部位の障害によって生じますか？",
+    "answer": "ウェルニッケ失語は、左側頭葉付近の障害によって生じます。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_24",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 24,
+    "provider": "gemini"
+  },
+  {
+    "question": "右利きの人の主要な言語機能は、脳の左右どちらの半球が優位ですか？",
+    "answer": "ほとんどの右利きの人では、単語、文法、語彙などの主要な言語機能は左半球優位です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_24",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 24,
+    "provider": "gemini"
+  },
+  {
+    "question": "声の抑揚の把握や比喩の理解は、脳の左右どちらの半球が優位であると言われていますか？",
+    "answer": "声の抑揚の把握や比喩の理解については、右半球優位であると言われています。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_24",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 24,
+    "provider": "gemini"
+  },
+  {
+    "question": "個人の言語能力が全体的な知的能力と乖離することがあるのは、どのような疾患の例ですか？",
+    "answer": "読字障害、ウィリアムズ症候群、自閉症などの例があります。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_24",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 24,
+    "provider": "gemini"
+  },
+  {
+    "question": "生得論とはどのような考え方ですか？",
+    "answer": "人が環境の中で聴取する音声から自力で文法などの規則を見出し学習する機能を生得的に備えているため、特に教わらなくても言語を学習できるとする考え方です。",
+    "question_type": "fact",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_25",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 25,
+    "provider": "gemini"
+  },
+  {
+    "question": "新生児はいつから言語を聴いていると考えられていますか？",
+    "answer": "近赤外線分光法を用いた研究で、生後2から5日の新生児が順再生の声や母国語を聞いた際に聴覚皮質の血流増加が大きかったことから、出産前から母体内で言語を聴いている可能性が示唆されています。",
+    "question_type": "reason",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_25",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 25,
+    "provider": "gemini"
+  },
+  {
+    "question": "新生児に対する実験で、外国語と母国語ではどちらの言語を聞いたときに聴覚皮質の血流増加が大きかったですか？",
+    "answer": "母国語を聞いたときの方が、外国語を聞いたときよりも聴覚皮質の血流増加が大きかったと報告されています。",
+    "question_type": "comparison",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_25",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 25,
+    "provider": "gemini"
+  },
+  {
+    "question": "言語聴覚療法は、テキストに記載されているどの分野に関連しますか？",
+    "answer": "言語聴覚療法は、言語に関する問題を扱う応用言語学の分野に関連します。",
+    "question_type": "application",
+    "source_chunk_id": "wikipedia_ja_1_言語_chunk_25",
+    "doc_id": "wikipedia_ja_1_言語",
+    "dataset_type": "wikipedia_ja",
+    "chunk_idx": 25,
+    "provider": "gemini"
+  }
+]
