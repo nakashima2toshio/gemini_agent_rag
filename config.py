@@ -334,7 +334,8 @@ class PathConfig:
     OUTPUT_DIR: Path = BASE_DIR / "OUTPUT"
     QA_OUTPUT_DIR: Path = BASE_DIR / "qa_output"
     DATASETS_DIR: Path = BASE_DIR / "datasets"
-    TEMP_DIR: Path = BASE_DIR / "temp_uploads"
+    TEMP_DIR: Path = BASE_DIR / "temp_uploads" # これを追加
+    LOG_DIR: Path = BASE_DIR / "logs"
 
     @classmethod
     def ensure_dirs(cls):
@@ -343,6 +344,7 @@ class PathConfig:
         cls.QA_OUTPUT_DIR.mkdir(exist_ok=True)
         cls.DATASETS_DIR.mkdir(exist_ok=True)
         cls.TEMP_DIR.mkdir(exist_ok=True)
+        cls.LOG_DIR.mkdir(exist_ok=True)
 
 
 # ===================================================================
@@ -432,6 +434,31 @@ class GeminiConfig:
     def supports_thinking_level(cls, model: str) -> bool:
         """モデルがthinking_levelをサポートするかチェック"""
         return model.startswith("gemini-3")
+
+
+# ===================================================================
+# RAG Agent設定
+# ===================================================================
+
+class AgentConfig:
+    """エージェント設定"""
+
+    # RAG検索設定
+    RAG_DEFAULT_COLLECTION: str = "qa_a02_qa_pairs_wikipedia_ja" # Default collection to search
+    RAG_AVAILABLE_COLLECTIONS: List[str] = [ # List of available collections
+        "qa_a02_qa_pairs_wikipedia_ja",
+        "qa_a02_qa_pairs_livedoor",
+        # Add other relevant collection names here
+    ]
+    RAG_SEARCH_LIMIT: int = 3
+    RAG_SCORE_THRESHOLD: float = 0.70  # 検索結果として採用する最小スコア
+
+    # エージェントモデル設定
+    MODEL_NAME: str = GeminiConfig.DEFAULT_MODEL
+
+    # ロギング設定
+    CHAT_LOG_FILE_NAME: str = "agent_chat.log"
+    CHAT_LOG_LEVEL: str = "INFO"
 
 
 # ===================================================================

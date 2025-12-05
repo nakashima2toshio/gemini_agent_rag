@@ -180,7 +180,6 @@ class QdrantHealthChecker:
     def check_qdrant(self) -> Tuple[bool, str, Optional[Dict]]:
         """
         Qdrant接続チェック
-
         Returns:
             (接続成功フラグ, メッセージ, メトリクス)
         """
@@ -218,11 +217,9 @@ class QdrantHealthChecker:
 def create_qdrant_client(url: str = None, timeout: int = 30) -> QdrantClient:
     """
     Qdrantクライアントを作成
-
     Args:
         url: QdrantサーバーURL（デフォルト: localhost:6333）
         timeout: タイムアウト秒数
-
     Returns:
         QdrantClientインスタンス
     """
@@ -287,10 +284,8 @@ def get_collection_stats(
 def get_all_collections(client: QdrantClient) -> List[Dict[str, Any]]:
     """
     全コレクションの情報を取得
-
     Args:
         client: Qdrantクライアント
-
     Returns:
         コレクション情報のリスト
     """
@@ -908,13 +903,11 @@ def search_collection(
 ) -> List[Dict[str, Any]]:
     """
     コレクションを検索
-
     Args:
         client: Qdrantクライアント
         collection_name: コレクション名
         query_vector: クエリベクトル
         limit: 結果数上限
-
     Returns:
         検索結果のリスト
     """
