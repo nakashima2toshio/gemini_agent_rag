@@ -13,7 +13,7 @@ config.py - 設定・定数の一元管理
 - helper_api.py
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Type
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -334,11 +334,11 @@ class PathConfig:
     OUTPUT_DIR: Path = BASE_DIR / "OUTPUT"
     QA_OUTPUT_DIR: Path = BASE_DIR / "qa_output"
     DATASETS_DIR: Path = BASE_DIR / "datasets"
-    TEMP_DIR: Path = BASE_DIR / "temp_uploads" # これを追加
+    TEMP_DIR: Path = BASE_DIR / "temp_uploads"
     LOG_DIR: Path = BASE_DIR / "logs"
 
     @classmethod
-    def ensure_dirs(cls):
+    def ensure_dirs(cls) -> None:
         """必要なディレクトリを作成"""
         cls.OUTPUT_DIR.mkdir(exist_ok=True)
         cls.QA_OUTPUT_DIR.mkdir(exist_ok=True)
@@ -473,13 +473,13 @@ class LLMProviderConfig:
     DEFAULT_EMBEDDING_PROVIDER: str = "gemini"  # "openai" or "gemini"
 
     @classmethod
-    def get_embedding_dims(cls, provider: str = None) -> int:
+    def get_embedding_dims(cls, provider: Optional[str] = None) -> int:
         """プロバイダーに応じたEmbedding次元数を取得"""
         provider = provider or cls.DEFAULT_EMBEDDING_PROVIDER
         if provider.lower() == "gemini":
-            return GeminiConfig.EMBEDDING_DIMS  # 3072
+            return GeminiConfig.EMBEDDING_DIMS
         else:
-            return QdrantConfig.DEFAULT_VECTOR_SIZE  # 1536
+            return QdrantConfig.DEFAULT_VECTOR_SIZE
 
 
 # ===================================================================
