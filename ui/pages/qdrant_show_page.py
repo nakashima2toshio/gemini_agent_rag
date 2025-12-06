@@ -271,7 +271,18 @@ def show_qdrant_page():
                             st.write(
                                 f"**{selected_collection} のデータサンプル ({len(df_points)} 件):**"
                             )
-                            st.dataframe(df_points, use_container_width=True)
+                            st.dataframe(
+                                df_points,
+                                use_container_width=True,
+                                column_config={
+                                    "answer": st.column_config.TextColumn(
+                                        "回答",
+                                        help="Qdrantに登録された回答",
+                                        width="large", # 'small', 'medium', 'large'
+                                        max_chars=250, # 必要に応じて調整
+                                    )
+                                }
+                            )
 
                             # エクスポート機能
                             col1, col2 = st.columns(2)

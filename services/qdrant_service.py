@@ -18,6 +18,7 @@ import socket
 import time
 import logging
 import traceback
+import glob
 from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional, Tuple, Iterable
 
@@ -45,27 +46,110 @@ QDRANT_CONFIG = {
     "docker_image": "qdrant/qdrant",
 }
 
-# コレクション固有の埋め込み設定
-COLLECTION_EMBEDDINGS_SEARCH = {
-    "qa_corpus": {"model": "gemini-embedding-001", "dims": 3072},
-    "qa_cc_news_a02_llm": {"model": "gemini-embedding-001", "dims": 3072},
-    "qa_cc_news_a03_rule": {"model": "gemini-embedding-001", "dims": 3072},
-    "qa_cc_news_a10_hybrid": {"model": "gemini-embedding-001", "dims": 3072},
-    "qa_livedoor_a02_20_llm": {"model": "gemini-embedding-001", "dims": 3072},
-    "qa_livedoor_a03_rule": {"model": "gemini-embedding-001", "dims": 3072},
-    "qa_livedoor_a10_hybrid": {"model": "gemini-embedding-001", "dims": 3072},
-}
+# コレクション固有の埋め込み設定 (Deprecated: Use get_collection_embedding_params instead)
+COLLECTION_EMBEDDINGS_SEARCH = {}
 
-# コレクションとCSVファイルの対応表
-COLLECTION_CSV_MAPPING = {
-    "qa_corpus": "qa_pairs_corpus.csv",
-    "qa_cc_news_a02_llm": "a02_qa_pairs_cc_news.csv",
-    "qa_cc_news_a03_rule": "a03_qa_pairs_cc_news.csv",
-    "qa_cc_news_a10_hybrid": "a10_qa_pairs_cc_news.csv",
-    "qa_livedoor_a02_20_llm": "a02_qa_pairs_livedoor.csv",
-    "qa_livedoor_a03_rule": "a03_qa_pairs_livedoor.csv",
-    "qa_livedoor_a10_hybrid": "a10_qa_pairs_livedoor.csv",
-}
+# コレクションとCSVファイルの対応表 (Deprecated: Use get_dynamic_collection_mapping instead)
+COLLECTION_CSV_MAPPING = {}
+
+
+def map_collection_to_csv(collection_name: str, qa_output_dir: str = "qa_output") -> Optional[str]:
+    """
+    コレクション名から対応するCSVファイル名を推測して返す
+
+    Args:
+        collection_name: コレクション名
+        qa_output_dir: CSVファイルが格納されているディレクトリ
+
+    Returns:
+        ファイル名（パスなし）、見つからない場合はNone
+    """
+    # パターン1: 完全一致 (qa_output/{collection_name}.csv)
+    exact_match = os.path.join(qa_output_dir, f"{collection_name}.csv")
+    if os.path.exists(exact_match):
+        return os.path.basename(exact_match)
+
+    # パターン2: 接頭辞 'qa_' を除外 (qa_{name} -> {name}.csv)
+    if collection_name.startswith("qa_"):
+        stripped_name = collection_name[3:]
+        stripped_match = os.path.join(qa_output_dir, f"{stripped_name}.csv")
+        if os.path.exists(stripped_match):
+            return os.path.basename(stripped_match)
+
+    return None
+
+
+def get_dynamic_collection_mapping(
+    client: QdrantClient, qa_output_dir: str = "qa_output"
+) -> Dict[str, str]:
+    """
+    Qdrantのコレクション一覧とローカルのCSVファイルを動的にマッピング
+
+    Args:
+        client: QdrantClientインスタンス
+        qa_output_dir: CSVディレクトリ
+
+    Returns:
+        {コレクション名: CSVファイル名} の辞書
+    """
+    mapping = {}
+    try:
+        # コレクション一覧取得
+        collections_resp = client.get_collections()
+        for collection in collections_resp.collections:
+            col_name = collection.name
+            csv_file = map_collection_to_csv(col_name, qa_output_dir)
+            if csv_file:
+                mapping[col_name] = csv_file
+    except Exception as e:
+        logger.error(f"動的マッピング生成エラー: {e}")
+
+    return mapping
+
+
+def get_collection_embedding_params(
+    client: QdrantClient, collection_name: str
+) -> Dict[str, Any]:
+    """
+    コレクションの設定（ベクトル次元数）から埋め込みモデル設定を推論
+
+    Args:
+        client: QdrantClient
+        collection_name: コレクション名
+
+    Returns:
+        {"model": str, "dims": int}
+    """
+    # デフォルト設定（Gemini）
+    default_params = {"model": "gemini-embedding-001", "dims": 3072}
+
+    try:
+        info = client.get_collection(collection_name)
+        vectors_config = info.config.params.vectors
+
+        size = 0
+        if hasattr(vectors_config, "size"):
+            size = vectors_config.size
+        elif isinstance(vectors_config, dict):
+            # マルチベクトルの場合は最初のものを採用
+            first_key = next(iter(vectors_config))
+            config = vectors_config[first_key]
+            if hasattr(config, "size"):
+                size = config.size
+
+        if size == 1536:
+            return {"model": "text-embedding-3-small", "dims": 1536}
+        elif size == 3072:
+            return {"model": "gemini-embedding-001", "dims": 3072}
+        elif size > 0:
+            # 未知の次元数の場合はサイズだけ更新してモデルはデフォルト（または汎用）
+            return {"model": "unknown-embedding-model", "dims": size}
+
+        return default_params
+
+    except Exception as e:
+        logger.warning(f"コレクション設定取得失敗 ({collection_name}): {e}")
+        return default_params
 
 
 # ===================================================================

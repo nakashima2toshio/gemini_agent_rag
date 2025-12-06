@@ -1,4 +1,4 @@
-# agent_main.py
+# python agent_main.py
 
 import os
 import google.generativeai as genai
@@ -158,14 +158,12 @@ def run_agent_turn(chat_session: ChatSession, user_input: str, return_tool_info:
                 logger.info(f"Tool Result: {log_tool_result}")
                 
                 response = chat_session.send_message(
-                    genai.protos.Content(
-                        parts=[genai.protos.Part(
-                            function_response=genai.protos.FunctionResponse(
-                                name=tool_name,
-                                response={'result': tool_result}
-                            )
-                        )]
-                    )
+                    [genai.protos.Part(
+                        function_response={
+                            "name": tool_name,
+                            "response": {'result': tool_result}
+                        }
+                    )]
                 )
                 break 
 

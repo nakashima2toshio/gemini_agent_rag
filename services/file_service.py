@@ -21,7 +21,7 @@ from typing import Dict, List, Optional
 import pandas as pd
 
 from config import DATASET_CONFIGS
-from services.qdrant_service import COLLECTION_CSV_MAPPING
+from services.qdrant_service import map_collection_to_csv
 
 logger = logging.getLogger(__name__)
 
@@ -214,7 +214,7 @@ def load_sample_questions_from_csv(
         質問のリスト
     """
     # コレクション名に対応するCSVファイルを取得
-    csv_filename = COLLECTION_CSV_MAPPING.get(collection_name)
+    csv_filename = map_collection_to_csv(collection_name)
     if not csv_filename:
         return []
 
@@ -287,7 +287,7 @@ def load_collection_qa_preview(
         question, answerカラムのDataFrame（上位num_rows行）、エラー時はNone
     """
     # コレクション名に対応するCSVファイルを取得
-    csv_filename = COLLECTION_CSV_MAPPING.get(collection_name)
+    csv_filename = map_collection_to_csv(collection_name)
     if not csv_filename:
         logger.warning(
             f"コレクション '{collection_name}' に対応するCSVファイルが見つかりません"

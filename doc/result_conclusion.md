@@ -35,6 +35,20 @@ helper_st.py
 helper_text.py
 
 
+-----------------------------------------
+qa_output/a02_qa_pairs_wikipedia_ja.csv
+Wikipedia日本語
+
+qa_output/a02_qa_pairs_japanese_text.csv
+日本語Webテキスト（CC100)
+
+qa_output/a02_qa_pairs_cc_news.csv
+CC-News（英語ニュース）
+
+qa_output/a02_qa_pairs_livedoor.csv
+Livedoorニュースコーパス
+----------------------------------------
+
 # カバレージ分析結果の総合比較レポート
 
 ## エグゼクティブサマリー

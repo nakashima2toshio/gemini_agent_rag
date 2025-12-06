@@ -83,7 +83,6 @@ def list_rag_collections() -> str:
     """
     利用可能なRAGのコレクション一覧（ナレッジベースの種類）を取得します。
     ユーザーが「どのような知識があるか」「コレクション一覧を教えて」と質問した場合に使用してください。
-
     Returns:
         str: 利用可能なコレクション名のリスト。
     """
@@ -171,11 +170,16 @@ def search_rag_knowledge_base(
 
         metrics.total_results = len(results) if results else 0
 
+        # 結果がない場合の詳細フィードバック
         if not results:
             metrics.latency_ms = (time.time() - start_time) * 1000.0
             _search_metrics_log.append(metrics)
             logger.info("検索結果: 0件")
-            return "[[NO_RAG_RESULT]] 検索結果が見つかりませんでした。"
+            return (
+                f"[[NO_RAG_RESULT]] 検索結果が見つかりませんでした。"
+                f"コレクション: '{collection_name}'。"
+                f"クエリ: '{query}'。"
+            )
 
         scores: List[float] = [res.get("score", 0.0) for res in results]
         metrics.scores = scores
@@ -209,8 +213,17 @@ def search_rag_knowledge_base(
             f"top_score={metrics.top_score:.2f}, latency={metrics.latency_ms:.1f}ms"
         )
 
+        # 閾値以下の結果しかなかった場合の詳細フィードバック
         if not formatted_results:
-            return "[[NO_RAG_RESULT]] 検索結果は見つかりましたが、関連性スコアが低いため採用しませんでした。"
+            first_q = results[0].get("payload", {}).get("question", "N/A") if results else "N/A"
+            return (
+                f"[[NO_RAG_RESULT_LOW_SCORE]] 検索結果は見つかりましたが、関連性スコアが低すぎたため採用しませんでした。"
+                f"コレクション: '{collection_name}'。"
+                f"ヒット数 (閾値未満): {metrics.total_results}件。"
+                f"最高スコア: {metrics.top_score:.2f}。"
+                f"参考 (最高スコアのQ): '{first_q[:50]}...'。"
+                f"クエリ: '{query}'。"
+            )
 
         return "\n".join(formatted_results)
 

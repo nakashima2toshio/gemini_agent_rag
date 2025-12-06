@@ -21,8 +21,8 @@ from qdrant_client import QdrantClient
 from services.qdrant_service import (
     QdrantDataFetcher,
     embed_query_for_search,
-    COLLECTION_EMBEDDINGS_SEARCH,
-    COLLECTION_CSV_MAPPING,
+    get_dynamic_collection_mapping,
+    get_collection_embedding_params,
 )
 from services.file_service import load_source_qa_data
 
@@ -32,29 +32,14 @@ def show_qdrant_search_page():
     st.title("🔎 Qdrant検索")
     st.caption("Qdrantベクトルデータベースを使用した意味検索")
 
-    # コレクションとCSVファイルの対応表を表示
-    st.subheader("📊 コレクションとCSVファイルの対応")
-    mapping_data = []
-    for collection, csv_file in COLLECTION_CSV_MAPPING.items():
-        mapping_data.append(
-            {
-                "コレクション名": collection,
-                "CSVファイル": csv_file,
-                "ファイルパス": f"qa_output/{csv_file}",
-            }
-        )
-    mapping_df = pd.DataFrame(mapping_data)
-    st.table(mapping_df)
-    st.divider()
-
     # Qdrant接続確認
     qdrant_url = "http://localhost:6333"
-
-    # 利用可能なコレクションを取得
+    client = None
     available_collections = []
+
     try:
-        temp_client = QdrantClient(url=qdrant_url)
-        collections_response = temp_client.get_collections()
+        client = QdrantClient(url=qdrant_url)
+        collections_response = client.get_collections()
         available_collections = [col.name for col in collections_response.collections]
     except Exception:
         st.error(f"❌ Qdrantサーバーに接続できません: {qdrant_url}")
@@ -63,6 +48,29 @@ def show_qdrant_search_page():
         st.caption("または")
         st.code("docker run -p 6333:6333 qdrant/qdrant", language="bash")
         return
+
+    # コレクションとCSVファイルの対応表を表示（動的取得）
+    st.subheader("📊 コレクションとCSVファイルの対応")
+    
+    # 動的マッピングの取得
+    dynamic_mapping = get_dynamic_collection_mapping(client)
+    
+    if dynamic_mapping:
+        mapping_data = []
+        for collection, csv_file in dynamic_mapping.items():
+            mapping_data.append(
+                {
+                    "コレクション名": collection,
+                    "CSVファイル": csv_file,
+                    "ファイルパス": f"qa_output/{csv_file}",
+                }
+            )
+        mapping_df = pd.DataFrame(mapping_data)
+        st.table(mapping_df)
+    else:
+        st.info("コレクションとCSVファイルの対応情報はありません（コレクションが存在しないか、命名規則が一致しません）")
+
+    st.divider()
 
     if not available_collections:
         st.warning("利用可能なコレクションがありません")
@@ -81,8 +89,8 @@ def show_qdrant_search_page():
         )
 
         # コレクション情報表示
-        if collection in COLLECTION_EMBEDDINGS_SEARCH:
-            col_info = COLLECTION_EMBEDDINGS_SEARCH[collection]
+        if client and collection:
+            col_info = get_collection_embedding_params(client, collection)
             st.info(f"📊 {col_info['model']} ({col_info['dims']}次元)")
 
         # Top-K設定
@@ -162,9 +170,7 @@ def show_qdrant_search_page():
             client = QdrantClient(url=qdrant_url)
 
             # コレクションに対応した埋め込み設定を取得
-            collection_config = COLLECTION_EMBEDDINGS_SEARCH.get(
-                collection, {"model": "gemini-embedding-001", "dims": 3072}
-            )
+            collection_config = get_collection_embedding_params(client, collection)
             embedding_model = collection_config["model"]
             embedding_dims = collection_config.get("dims")
 
