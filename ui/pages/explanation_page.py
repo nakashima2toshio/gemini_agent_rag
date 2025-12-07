@@ -36,6 +36,11 @@ def render_markdown_with_mermaid(content: str):
 
         # Mermaid 図を表示
         mermaid_code = match.group(1).strip()
+
+        # ノードの背景色を黒、文字色を白に変更（デフォルトスタイルを上書き）
+        if mermaid_code.startswith("flowchart") or mermaid_code.startswith("graph"):
+            mermaid_code += "\nclassDef default fill:#000,stroke:#fff,stroke-width:1px,color:#fff;"
+
         if MERMAID_AVAILABLE:
             try:
                 stmd.st_mermaid(mermaid_code)

@@ -84,6 +84,8 @@ def get_dynamic_collection_mapping(
 ) -> Dict[str, str]:
     """
     Qdrantのコレクション一覧とローカルのCSVファイルを動的にマッピング
+    
+    改善版: ペイロードの'source'フィールドを優先的に参照する
 
     Args:
         client: QdrantClientインスタンス
@@ -98,9 +100,31 @@ def get_dynamic_collection_mapping(
         collections_resp = client.get_collections()
         for collection in collections_resp.collections:
             col_name = collection.name
-            csv_file = map_collection_to_csv(col_name, qa_output_dir)
+            csv_file = None
+            
+            # 方法1: ペイロードからソース情報を取得（確実）
+            try:
+                # 1件だけ取得してsourceを確認
+                points, _ = client.scroll(
+                    collection_name=col_name,
+                    limit=1,
+                    with_payload=["source"],
+                    with_vectors=False
+                )
+                if points and points[0].payload:
+                    source_val = points[0].payload.get("source")
+                    if source_val:
+                        csv_file = source_val
+            except Exception:
+                pass # ペイロード取得失敗時は次の方法へ
+
+            # 方法2: 名前から推測（フォールバック）
+            if not csv_file:
+                csv_file = map_collection_to_csv(col_name, qa_output_dir)
+            
             if csv_file:
                 mapping[col_name] = csv_file
+                
     except Exception as e:
         logger.error(f"動的マッピング生成エラー: {e}")
 
@@ -234,12 +258,13 @@ class QdrantDataFetcher:
     def fetch_collections(self) -> pd.DataFrame:
         """コレクション一覧を取得"""
         try:
-            collections = self.client.get_collections()
-
+            collections_response = self.client.get_collections()
+            collections = collections_response.collections # Actual list of collections
+            
             data = []
-            for collection in collections.collections:
+            for collection in collections: # Iterate through each collection object
                 try:
-                    info = self.client.get_collection(collection.name)
+                    info = self.client.get_collection(collection.name) # Try to get detailed info
                     data.append(
                         {
                             "Collection": collection.name,
@@ -249,7 +274,8 @@ class QdrantDataFetcher:
                             "Status": info.status,
                         }
                     )
-                except Exception:
+                except Exception as inner_e:
+                    logger.warning(f"Failed to fetch details for collection '{collection.name}': {inner_e}")
                     data.append(
                         {
                             "Collection": collection.name,
@@ -266,8 +292,9 @@ class QdrantDataFetcher:
                 else pd.DataFrame({"Info": ["No collections found"]})
             )
 
-        except Exception as e:
-            return pd.DataFrame({"Error": [str(e)]})
+        except Exception as outer_e:
+            logger.error(f"Failed to list collections from Qdrant: {outer_e}")
+            return pd.DataFrame({"Error": [str(outer_e)]})
 
     def fetch_collection_points(
         self, collection_name: str, limit: int = 50
@@ -460,25 +487,30 @@ def get_collection_stats(
 
 def get_all_collections(client: QdrantClient) -> List[Dict[str, Any]]:
     """全コレクションの情報を取得"""
-    collections = client.get_collections()
-    collection_list = []
+    try:
+        collections_response = client.get_collections()
+        collections = collections_response.collections
+        collection_list = []
 
-    for collection in collections.collections:
-        try:
-            info = client.get_collection(collection.name)
-            collection_list.append(
-                {
-                    "name": collection.name,
-                    "points_count": info.points_count,
-                    "status": info.status,
-                }
-            )
-        except Exception:
-            collection_list.append(
-                {"name": collection.name, "points_count": 0, "status": "unknown"}
-            )
-
-    return collection_list
+        for collection in collections:
+            try:
+                info = client.get_collection(collection.name)
+                collection_list.append(
+                    {
+                        "name": collection.name,
+                        "points_count": info.points_count,
+                        "status": info.status,
+                    }
+                )
+            except Exception as inner_e:
+                logger.warning(f"Failed to get info for collection '{collection.name}': {inner_e}")
+                collection_list.append(
+                    {"name": collection.name, "points_count": 0, "status": "Error"}
+                )
+        return collection_list
+    except Exception as outer_e:
+        logger.error(f"Failed to list collections from Qdrant: {outer_e}")
+        return []
 
 
 def delete_all_collections(client: QdrantClient, excluded: List[str] = None) -> int:
@@ -551,7 +583,7 @@ def build_inputs_for_embedding(df: pd.DataFrame, include_answer: bool) -> List[s
 
 
 def embed_texts_for_qdrant(
-    texts: List[str], model: str = "gemini-embedding-001", batch_size: int = 128
+    texts: List[str], model: str = "gemini-embedding-001", batch_size: int = 100
 ) -> List[List[float]]:
     """テキストをバッチ処理でEmbeddingに変換（Gemini API使用）"""
     # Gemini Embeddingクライアントを使用

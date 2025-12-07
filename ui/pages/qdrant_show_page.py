@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-qdrant_show_page.py - Qdrantデータ表示ページ
+qdrant_show_page.py - Qdrantデータ管理ページ
 ============================================
-Qdrantコレクションのデータ表示機能
+Qdrantコレクションの閲覧・管理（削除・統合）機能
 
 機能:
-- コレクション一覧表示
-- データソース情報表示
-- ポイントデータ取得・表示
+- コレクション一覧表示と管理（削除）
+- コレクション統合
+- ポイントデータ詳細閲覧
 - ヘルスチェック
 """
 
 import time
 from datetime import datetime
+import logging
 
 import pandas as pd
 import streamlit as st
@@ -24,8 +25,12 @@ from services.qdrant_service import (
     QdrantHealthChecker,
     QdrantDataFetcher,
     QDRANT_CONFIG,
+    merge_collections,
+    get_collection_stats,
+    get_all_collections, # 追加
 )
 
+logger = logging.getLogger(__name__)
 
 def display_source_info(source_info: dict) -> None:
     """データソース情報を表示"""
@@ -62,290 +67,238 @@ def display_source_info(source_info: dict) -> None:
         })
 
     df_sources = pd.DataFrame(source_data)
-    st.dataframe(df_sources, use_container_width=True, hide_index=True)
+    st.dataframe(df_sources, width='stretch', hide_index=True)
 
 
 def show_qdrant_page():
-    """画面4: Qdrant Show - コレクション表示"""
-    st.title("🔍 Show-Qdrantコレクション")
-    st.caption("Qdrant Vector Database の状態監視とデータ表示")
+    """画面: Qdrantデータ管理"""
+    st.title("🗄️ Qdrantデータ管理")
+    st.caption("Qdrantコレクションの閲覧、削除、および統合管理")
 
     # セッションステート初期化
     if "qdrant_debug_mode" not in st.session_state:
         st.session_state.qdrant_debug_mode = False
-    if "qdrant_auto_refresh" not in st.session_state:
-        st.session_state.qdrant_auto_refresh = False
-    if "qdrant_refresh_interval" not in st.session_state:
-        st.session_state.qdrant_refresh_interval = 30
 
-    # サイドバー（左ペイン）
+    # サイドバー（接続設定など）
     with st.sidebar:
-        st.header("⚙️ Qdrant接続状態")
-
+        st.header("⚙️ Qdrant接続")
+        
         # デバッグモード切り替え
         debug_mode = st.checkbox(
             "🐛 デバッグモード", value=st.session_state.qdrant_debug_mode
         )
         st.session_state.qdrant_debug_mode = debug_mode
 
-        # 自動リフレッシュ設定
-        col1, col2 = st.columns(2)
-        with col1:
-            auto_refresh = st.checkbox(
-                "🔄 自動更新", value=st.session_state.qdrant_auto_refresh
-            )
-            st.session_state.qdrant_auto_refresh = auto_refresh
-        with col2:
-            if auto_refresh:
-                refresh_interval = st.number_input(
-                    "間隔(秒)", min_value=5, max_value=300, value=30
-                )
-                st.session_state.qdrant_refresh_interval = refresh_interval
-
-        # 接続チェック実行ボタン
-        check_button = st.button(
-            "🔍 接続チェック実行", type="primary", use_container_width=True
-        )
-
-        # HealthCheckerインスタンス
+        # 接続チェック
         checker = QdrantHealthChecker(debug_mode=debug_mode)
+        is_connected, message, _ = checker.check_qdrant()
+        
+        if is_connected:
+            st.success(f"✅ 接続済み: {QDRANT_CONFIG['url']}")
+        else:
+            st.error(f"❌ 未接続: {message}")
+            st.code("docker run -p 6333:6333 qdrant/qdrant", language="bash")
+            return # 接続できない場合はここで終了
 
-        # 接続状態表示エリア
-        status_container = st.container()
-
-        # 自動リフレッシュまたはボタン押下時に実行
-        refresh_interval = st.session_state.qdrant_refresh_interval
-        if check_button or (auto_refresh and time.time() % refresh_interval < 1):
-            with status_container:
-                with st.spinner("チェック中..."):
-                    is_connected, message, metrics = checker.check_qdrant()
-
-                # Qdrantの状態表示
-                if is_connected:
-                    st.success(f"{QDRANT_CONFIG['icon']} **{QDRANT_CONFIG['name']}**")
-                    st.caption(f"✅ {message}")
-
-                    # メトリクス表示
-                    if metrics and debug_mode:
-                        with st.expander("詳細情報", expanded=False):
-                            for key, value in metrics.items():
-                                st.text(f"{key}: {value}")
-                else:
-                    st.error(f"{QDRANT_CONFIG['icon']} **{QDRANT_CONFIG['name']}**")
-                    st.caption(f"❌ {message}")
-
-                    # エラー詳細（デバッグモード）
-                    if debug_mode:
-                        with st.expander("エラー詳細", expanded=False):
-                            st.code(message)
-                            st.caption(
-                                f"Host: {QDRANT_CONFIG.get('host')}:{QDRANT_CONFIG.get('port')}"
-                            )
-
-                            # Docker起動コマンド表示
-                            st.info("Docker起動コマンド:")
-                            cmd = f"docker run -d -p {QDRANT_CONFIG['port']}:{QDRANT_CONFIG['port']} {QDRANT_CONFIG['docker_image']}"
-                            st.code(cmd, language="bash")
-
-    # メインエリア（右ペイン）
-    st.header("📊 Qdrant データ表示")
-
+    # Qdrantクライアント作成
     try:
-        # Qdrantクライアントを作成
-        client = QdrantClient(url=QDRANT_CONFIG["url"], timeout=5)
+        client = QdrantClient(url=QDRANT_CONFIG["url"], timeout=10)
         data_fetcher = QdrantDataFetcher(client)
+    except Exception as e:
+        st.error(f"クライアント初期化エラー: {e}")
+        return
 
-        # コレクション概要表示
-        st.subheader("📚 コレクション一覧")
+    # タブで機能を分割
+    tab_list, tab_details, tab_merge = st.tabs([
+        "📊 コレクション一覧・削除", 
+        "🔍 データ詳細閲覧", 
+        "🔗 コレクション統合"
+    ])
 
-        # コレクション一覧を取得
-        df_collections = data_fetcher.fetch_collections()
-
-        if not df_collections.empty and "Collection" in df_collections.columns:
-            st.dataframe(df_collections, use_container_width=True)
-
-            # コレクション名のリストを作成
-            collection_names = df_collections["Collection"].tolist()
-
-            # ===== データソース情報の表示（メインエリア先頭） =====
+    # =================================================================
+    # タブ1: コレクション一覧・削除
+    # =================================================================
+    with tab_list:
+        st.subheader("📚 コレクション管理")
+        
+        # コレクション一覧取得
+        # data_fetcher.fetch_collections() は DataFrame を返すが、ここでは操作用に生リストが欲しい
+        # なので get_all_collections を使用する
+        collections = get_all_collections(client)
+        
+        if not collections:
+            st.info("コレクションが存在しません")
+        else:
+            # 総計表示
+            total_points = sum(c["points_count"] for c in collections if isinstance(c["points_count"], int))
+            st.metric("総コレクション数 / 総ポイント数", f"{len(collections)} / {total_points:,}")
+            
             st.divider()
-            st.subheader("📂 コレクションのデータソース情報")
-            st.caption(
-                "各コレクションがqa_output/ディレクトリーのどのファイルから構成されているかを表示します"
+
+            # リスト表示と削除ボタン
+            # ヘッダー
+            cols = st.columns([3, 2, 2, 2])
+            cols[0].markdown("**コレクション名**")
+            cols[1].markdown("**ポイント数**")
+            cols[2].markdown("**ステータス**")
+            cols[3].markdown("**操作**")
+            
+            st.markdown("---")
+
+            for col_info in collections:
+                name = col_info["name"]
+                points = col_info["points_count"]
+                status = col_info["status"]
+                
+                c1, c2, c3, c4 = st.columns([3, 2, 2, 2])
+                c1.code(name)
+                c2.text(f"{points:,}")
+                
+                # ステータス色分け
+                if status == "green":
+                    c3.success(status)
+                elif status == "yellow":
+                    c3.warning(status)
+                else:
+                    c3.error(status)
+                
+                # 削除ボタン
+                if c4.button("🗑️ 削除", key=f"del_btn_{name}", type="secondary"):
+                    st.session_state[f"confirm_delete_{name}"] = True
+                
+                # 削除確認
+                if st.session_state.get(f"confirm_delete_{name}", False):
+                    with st.container():
+                        st.warning(f"⚠️ '{name}' を本当に削除しますか？")
+                        col_yes, col_no = st.columns(2)
+                        if col_yes.button("✅ はい", key=f"yes_del_{name}"):
+                            try:
+                                client.delete_collection(name)
+                                st.success(f"削除しました: {name}")
+                                st.session_state[f"confirm_delete_{name}"] = False
+                                time.sleep(1)
+                                st.rerun()
+                            except Exception as e:
+                                st.error(f"削除エラー: {e}")
+                        
+                        if col_no.button("❌ いいえ", key=f"no_del_{name}"):
+                            st.session_state[f"confirm_delete_{name}"] = False
+                            st.rerun()
+                    st.markdown("---")
+
+    # =================================================================
+    # タブ2: データ詳細閲覧
+    # =================================================================
+    with tab_details:
+        st.subheader("🔍 ポイントデータ詳細")
+        
+        if not collections:
+            st.warning("表示できるコレクションがありません")
+        else:
+            collection_names = [c["name"] for c in collections]
+            
+            selected_collection = st.selectbox(
+                "コレクションを選択", 
+                options=collection_names,
+                key="details_collection_select"
             )
-
-            # 各コレクションのソース情報を表示
-            for collection_name in collection_names:
-                with st.expander(
-                    f"📦 {collection_name}", expanded=(collection_name == "qa_corpus")
-                ):
-                    with st.spinner(f"{collection_name} のソース情報を取得中..."):
-                        source_info = data_fetcher.fetch_collection_source_info(
-                            collection_name
-                        )
-                        display_source_info(source_info)
-
-            # エクスポート機能
+            
             col1, col2 = st.columns(2)
             with col1:
-                csv = df_collections.to_csv(index=False)
-                st.download_button(
-                    label="📥 CSVダウンロード",
-                    data=csv,
-                    file_name=f"qdrant_collections_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-                    mime="text/csv",
-                )
+                if st.button("📦 データソース分析を表示", width='stretch'):
+                    with st.spinner("分析中..."):
+                        source_info = data_fetcher.fetch_collection_source_info(selected_collection)
+                        display_source_info(source_info)
+            
             with col2:
-                json_str = df_collections.to_json(orient="records", indent=2)
-                st.download_button(
-                    label="📥 JSONダウンロード",
-                    data=json_str,
-                    file_name=f"qdrant_collections_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
-                    mime="application/json",
-                )
-
-            # コレクション詳細表示
+                limit = st.number_input("表示件数", 10, 500, 50, step=10)
+            
             st.divider()
-            st.subheader("🔍 コレクション詳細データ")
-
-            if collection_names:
-                selected_collection = st.selectbox(
-                    "詳細を表示するコレクションを選択",
-                    options=collection_names,
-                    key="selected_collection",
-                )
-
-                col1, col2, col3 = st.columns([1, 1, 2])
-                with col1:
-                    limit = st.number_input(
-                        "表示件数",
-                        min_value=1,
-                        max_value=500,
-                        value=50,
-                        key="qdrant_limit",
-                    )
-                with col2:
-                    show_details = st.button(
-                        "📊 詳細情報を表示", key="show_collection_details"
-                    )
-                with col3:
-                    fetch_points = st.button(
-                        "🔍 ポイントデータを取得", key="fetch_collection_points"
-                    )
-
-                # コレクション詳細情報の表示
-                if show_details:
-                    with st.spinner(f"{selected_collection} の詳細情報を取得中..."):
-                        info = data_fetcher.fetch_collection_info(selected_collection)
-
-                        if "error" not in info:
-                            col1, col2, col3, col4 = st.columns(4)
-                            with col1:
-                                st.metric("ベクトル数", info["vectors_count"])
-                            with col2:
-                                st.metric("ポイント数", info["points_count"])
-                            with col3:
-                                st.metric("インデックス済み", info["indexed_vectors"])
-                            with col4:
-                                st.metric("ステータス", info["status"])
-
-                            # 設定情報
-                            st.write("**ベクトル設定:**")
-                            st.write(
-                                f"  • ベクトル次元: {info['config']['vector_size']}"
-                            )
-                            st.write(f"  • 距離計算: {info['config']['distance']}")
-                        else:
-                            st.error(f"エラー: {info['error']}")
-
-                # ポイントデータの表示
-                if fetch_points:
-                    with st.spinner(
-                        f"{selected_collection} のポイントデータを取得中..."
-                    ):
-                        df_points = data_fetcher.fetch_collection_points(
-                            selected_collection, limit
+            
+            if st.button("🔎 データをロード", type="primary", width='stretch'):
+                with st.spinner("ロード中..."):
+                    df_points = data_fetcher.fetch_collection_points(selected_collection, limit=limit)
+                    
+                    if not df_points.empty and "ID" in df_points.columns:
+                        st.dataframe(
+                            df_points,
+                            width='stretch',
+                            column_config={
+                                "answer": st.column_config.TextColumn(
+                                    "回答", width="large", max_chars=200
+                                ),
+                                "question": st.column_config.TextColumn(
+                                    "質問", width="medium"
+                                )
+                            }
                         )
+                        
+                        # DLボタン
+                        csv = df_points.to_csv(index=False)
+                        st.download_button(
+                            "📥 CSVでダウンロード", 
+                            csv, 
+                            f"{selected_collection}_sample.csv",
+                            "text/csv"
+                        )
+                    else:
+                        st.warning("データが見つかりません、または取得できませんでした")
 
-                        if not df_points.empty and "ID" in df_points.columns:
-                            st.write(
-                                f"**{selected_collection} のデータサンプル ({len(df_points)} 件):**"
-                            )
-                            st.dataframe(
-                                df_points,
-                                use_container_width=True,
-                                column_config={
-                                    "answer": st.column_config.TextColumn(
-                                        "回答",
-                                        help="Qdrantに登録された回答",
-                                        width="large", # 'small', 'medium', 'large'
-                                        max_chars=250, # 必要に応じて調整
-                                    )
-                                }
-                            )
+    # =================================================================
+    # タブ3: コレクション統合
+    # =================================================================
+    with tab_merge:
+        st.subheader("🔗 コレクション統合")
+        st.caption("複数のコレクションを1つにまとめます")
 
-                            # エクスポート機能
-                            col1, col2 = st.columns(2)
-                            with col1:
-                                csv = df_points.to_csv(index=False)
-                                st.download_button(
-                                    label="📥 ポイントデータ CSVダウンロード",
-                                    data=csv,
-                                    file_name=f"{selected_collection}_points_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-                                    mime="text/csv",
-                                )
-                            with col2:
-                                json_str = df_points.to_json(orient="records", indent=2)
-                                st.download_button(
-                                    label="📥 ポイントデータ JSONダウンロード",
-                                    data=json_str,
-                                    file_name=f"{selected_collection}_points_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
-                                    mime="application/json",
-                                )
-                        elif "Info" in df_points.columns:
-                            st.info(df_points.iloc[0]["Info"])
-                        elif "Error" in df_points.columns:
-                            st.error(f"エラー: {df_points.iloc[0]['Error']}")
-                        else:
-                            st.info("ポイントデータが見つかりません")
-
-        elif "Info" in df_collections.columns:
-            st.info(df_collections.iloc[0]["Info"])
-        elif "Error" in df_collections.columns:
-            error_msg = df_collections.iloc[0]["Error"]
-            _show_connection_error(error_msg, debug_mode)
+        if len(collections) < 2:
+            st.warning("統合するには2つ以上のコレクションが必要です")
         else:
-            st.info("コレクションが見つかりません")
+            # マルチセレクト
+            collection_names = [c["name"] for c in collections]
+            selected_to_merge = st.multiselect(
+                "統合元コレクションを選択 (2つ以上)",
+                options=collection_names,
+                default=[]
+            )
+            
+            # 統合先名
+            default_name = f"integration_{datetime.now().strftime('%Y%m%d')}"
+            target_name = st.text_input("統合後のコレクション名", value=default_name)
+            
+            recreate = st.checkbox("既存コレクションがあれば上書きする", value=True, key="merge_recreate")
+            
+            if st.button("🚀 統合を実行", type="primary", disabled=len(selected_to_merge) < 2):
+                
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                log_area = st.empty()
+                logs = []
 
-    except Exception as e:
-        error_msg = str(e)
-        _show_connection_error(error_msg, debug_mode)
+                def merge_callback(msg, current, total):
+                    logs.append(msg)
+                    # 最新5行を表示
+                    log_area.text("\n".join(logs[-5:]))
+                    status_text.text(f"{msg} ({current}/{total})")
+                    if total > 0:
+                        progress_bar.progress(min(current / total, 1.0))
 
-    # フッター
-    st.divider()
-    st.caption(f"最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-    # デバッグ情報表示
-    if debug_mode:
-        with st.expander("🐛 デバッグ情報", expanded=False):
-            st.subheader("サーバー設定")
-            st.json(QDRANT_CONFIG)
-
-
-def _show_connection_error(error_msg: str, debug_mode: bool) -> None:
-    """接続エラーを表示"""
-    if "Connection refused" in error_msg or "[Errno 61]" in error_msg:
-        st.error("❌ Qdrantサーバーに接続できません")
-        st.warning("Qdrantサーバーが起動していることを確認してください")
-        st.code("python server.py", language="bash")
-        st.caption("または")
-        st.code("docker run -p 6333:6333 qdrant/qdrant", language="bash")
-        if debug_mode:
-            with st.expander("🔍 詳細エラー情報", expanded=False):
-                st.error(f"詳細エラー: {error_msg}")
-    elif "timeout" in error_msg.lower():
-        st.error("⏱️ Qdrantサーバーへの接続がタイムアウトしました")
-        st.warning("サーバーが応答していないか、ネットワークの問題があります")
-    else:
-        st.error(f"Qdrant接続エラー: {error_msg}")
-        st.info("Qdrantサーバーが正しく起動していることを確認してください")
+                try:
+                    result = merge_collections(
+                        client, 
+                        selected_to_merge, 
+                        target_name, 
+                        recreate=recreate,
+                        progress_callback=merge_callback
+                    )
+                    
+                    if result["success"]:
+                        st.success(f"✅ 統合完了！ 合計 {result['total_points']:,} ポイント")
+                        st.balloons()
+                        time.sleep(2)
+                        st.rerun()
+                    else:
+                        st.error(f"失敗: {result['error']}")
+                        
+                except Exception as e:
+                    st.error(f"予期せぬエラー: {e}")

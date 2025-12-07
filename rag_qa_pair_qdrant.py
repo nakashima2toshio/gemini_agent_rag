@@ -108,9 +108,9 @@ def main():
         page = st.radio(
             "機能選択",
             options=[
+                "explanation", # <-- Moved to top
                 "agent_chat",
                 "log_viewer",
-                "explanation",
                 "rag_download",
                 "qa_generation",
                 "qdrant_registration",
@@ -118,19 +118,21 @@ def main():
                 "qdrant_search",
             ],
             format_func=lambda x: {
+                "explanation": "📖 説明", # <-- Label for explanation
                 "agent_chat": "🤖 エージェント対話",
                 "log_viewer": "📊 未回答ログ",
-                "explanation": "📖 説明",
                 "rag_download": "📥 RAGデータダウンロード",
                 "qa_generation": "🤖 Q/A生成",
-                "qdrant_registration": "🗄️ Qdrant登録",
-                "show_qdrant": "🔍 Show-Qdrant",
+                "qdrant_registration": "📥 CSVデータ登録",
+                "show_qdrant": "🗄️ Qdrantデータ管理",
                 "qdrant_search": "🔎 Qdrant検索",
             }[x],
             label_visibility="collapsed",
         )
+        st.divider() # <-- Added after st.radio
 
-        st.divider()
+        st.divider() # Original divider
+
 
     # 選択された画面を表示
     page_mapping = {

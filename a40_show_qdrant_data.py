@@ -314,7 +314,7 @@ def display_source_info(source_info: Dict[str, Any]) -> None:
         })
 
     df_sources = pd.DataFrame(source_data)
-    st.dataframe(df_sources, use_container_width=True, hide_index=True)
+    st.dataframe(df_sources, width='stretch', hide_index=True)
 
     # 詳細情報（折りたたみ可能）
     with st.expander("📊 詳細情報", expanded=False):
@@ -369,7 +369,7 @@ def main():
                 st.session_state.refresh_interval = refresh_interval
         
         # 接続チェック実行ボタン
-        check_button = st.button("🔍 接続チェック実行", type="primary", use_container_width=True)
+        check_button = st.button("🔍 接続チェック実行", type="primary", width='stretch')
         
         # HealthCheckerインスタンス
         checker = QdrantHealthChecker(debug_mode=debug_mode)
@@ -429,7 +429,7 @@ def main():
         df_collections = data_fetcher.fetch_collections()
         
         if not df_collections.empty and "Collection" in df_collections.columns:
-            st.dataframe(df_collections, use_container_width=True)
+            st.dataframe(df_collections, width='stretch')
 
             # コレクション名のリストを作成
             collection_names = df_collections["Collection"].tolist()
@@ -514,7 +514,7 @@ def main():
                         
                         if not df_points.empty and "ID" in df_points.columns:
                             st.write(f"**{selected_collection} のデータサンプル ({len(df_points)} 件):**")
-                            st.dataframe(df_points, use_container_width=True)
+                            st.dataframe(df_points, width='stretch')
                             
                             # エクスポート機能
                             col1, col2 = st.columns(2)

@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/logs/unanswered_questions.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/qa_output/a02/qa_pairs_wikipedia_ja_20251204_075423.csv">
           <value>
             <Attribute>

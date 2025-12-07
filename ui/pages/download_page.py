@@ -44,7 +44,7 @@ def show_rag_download_page():
 
     if not df_preprocessed.empty:
         st.dataframe(
-            df_preprocessed, use_container_width=True, hide_index=True, height=200
+            df_preprocessed, width='stretch', hide_index=True, height=200
         )
     else:
         st.info(
@@ -181,7 +181,7 @@ def show_rag_download_page():
 
     # 実行ボタン
     run_download = st.button(
-        "🚀 ダウンロード＆前処理開始", type="primary", use_container_width=True
+        "🚀 ダウンロード＆前処理開始", type="primary", width='stretch'
     )
 
     st.divider()
@@ -449,4 +449,4 @@ def show_rag_download_page():
         st.divider()
         st.subheader("📋 データプレビュー（最初の10件）")
         df_preview = st.session_state["processed_df"].head(10)
-        st.dataframe(df_preview, use_container_width=True, hide_index=True)
+        st.dataframe(df_preview, width='stretch', hide_index=True)

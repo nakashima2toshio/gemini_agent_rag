@@ -19,6 +19,7 @@ This project implements a **Hybrid RAG (Retrieval-Augmented Generation) Agent** 
 *   **UI/Interface:**
     *   **CLI:** `agent_main.py` (Interactive Agent Terminal).
     *   **Web UI:** `rag_qa_pair_qdrant.py` (Streamlit Dashboard).
+        *Note: Mermaid diagrams in the Streamlit UI's explanation page (`ui/pages/explanation_page.py`) are styled with a black background, white text, and white border for nodes.*
 
 ### Data Flow
 1.  **Ingestion:** Documents (cc_news, livedoor, wikipedia) are loaded and preprocessed.

@@ -135,7 +135,7 @@ def show_qdrant_search_page():
                             df_qa = load_source_qa_data(source, num_rows=20)
                             if df_qa is not None:
                                 st.dataframe(
-                                    df_qa, use_container_width=True, hide_index=True
+                                    df_qa, width='stretch', hide_index=True
                                 )
                             else:
                                 st.info(f"データを読み込めません: qa_output/{source}")
@@ -158,9 +158,9 @@ def show_qdrant_search_page():
 
     col_search, col_clear = st.columns([4, 1])
     with col_search:
-        do_search = st.button("🔍 検索実行", type="primary", use_container_width=True)
+        do_search = st.button("🔍 検索実行", type="primary", width='stretch')
     with col_clear:
-        if st.button("🗑️ クリア", use_container_width=True):
+        if st.button("🗑️ クリア", width='stretch'):
             st.session_state.search_query = ""
             st.rerun()
 
@@ -211,7 +211,7 @@ def show_qdrant_search_page():
                 rows.append(row_data)
 
             df_results = pd.DataFrame(rows)
-            st.dataframe(df_results, use_container_width=True, hide_index=True)
+            st.dataframe(df_results, width='stretch', hide_index=True)
 
             # 最高スコアの結果を詳細表示
             if hits:

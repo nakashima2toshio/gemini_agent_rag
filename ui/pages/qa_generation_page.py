@@ -35,7 +35,7 @@ def show_qa_generation_page():
     df_history = load_qa_output_history()
 
     if not df_history.empty:
-        st.dataframe(df_history, use_container_width=True, hide_index=True, height=200)
+        st.dataframe(df_history, width='stretch', hide_index=True, height=200)
     else:
         st.info("まだQ&Aペアデータがありません。")
 
@@ -222,7 +222,7 @@ def show_qa_generation_page():
     run_qa_generation = st.button(
         "🚀 Q/A生成開始" if not st.session_state["qa_generation_running"] else "⏳ 処理中...",
         type="primary",
-        use_container_width=True,
+        width='stretch',
         disabled=st.session_state["qa_generation_running"]
     )
 

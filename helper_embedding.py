@@ -189,32 +189,55 @@ class GeminiEmbedding(EmbeddingClient):
         """
         バッチEmbedding生成
 
-        Note: Gemini APIは現在、1リクエストに1テキストのみ対応。
-              ループ処理でバッチを模擬し、レート制限を考慮。
+        Gemini APIのバッチ機能（contentsにリストを渡す）を使用して高速化
         """
         all_embeddings: List[List[float]] = []
         total = len(texts)
         start_time = time.time()
 
         # 開始ログ
-        logger.info(f"[Embedding] 開始: {total}件のテキストを処理します")
+        logger.info(f"[Embedding] 開始: {total}件のテキストを処理します (Batch Size: {batch_size})")
 
-        for i, text in enumerate(texts):
-            embedding = self.embed_text(text)
-            all_embeddings.append(embedding)
+        # Gemini API restriction: max 100 per batch
+        if batch_size > 100:
+            logger.warning(f"[Embedding] Batch size {batch_size} exceeds Gemini limit (100). Clamping to 100.")
+            batch_size = 100
 
-            # 進捗ログ（50件ごと、または最初と最後）
-            if (i + 1) % 50 == 0 or i == 0 or i + 1 == total:
+        for i in range(0, total, batch_size):
+            batch_texts = texts[i : i + batch_size]
+            
+            try:
+                response = self.client.models.embed_content(
+                    model=self.model,
+                    contents=batch_texts,
+                    config={"output_dimensionality": self._dims}
+                )
+                
+                # レスポンスからベクトルを抽出
+                # response.embeddings は ContentEmbedding オブジェクトのリスト
+                if hasattr(response, "embeddings") and response.embeddings:
+                    batch_embeddings = [e.values for e in response.embeddings]
+                    all_embeddings.extend(batch_embeddings)
+                else:
+                    raise ValueError("No embeddings returned in response")
+
+                # 進捗ログ
+                current_count = min(i + batch_size, total)
                 elapsed = time.time() - start_time
-                rate = (i + 1) / elapsed if elapsed > 0 else 0
-                remaining = (total - i - 1) / rate if rate > 0 else 0
-                logger.info(f"[Embedding] 進捗: {i + 1}/{total} ({(i + 1) / total * 100:.1f}%) "
-                           f"経過={elapsed:.1f}秒, 残り≈{remaining:.0f}秒")
+                logger.info(f"[Embedding] 進捗: {current_count}/{total} (Batch {i // batch_size + 1}) 経過={elapsed:.1f}秒")
 
-            # レート制限対策（100リクエストごとに待機）
-            if (i + 1) % batch_size == 0 and i + 1 < len(texts):
-                logger.debug(f"Processed {i + 1}/{len(texts)} embeddings, sleeping...")
-                time.sleep(1.0)
+                # レート制限への配慮 (バッチ間は少し待機)
+                time.sleep(0.5)
+
+            except Exception as e:
+                logger.error(f"[Embedding] Batch error at index {i}: {e}")
+                logger.warning("Error batch filled with zero vectors to maintain alignment.")
+                # エラー時はゼロ埋めして整合性を保つ
+                zeros = [[0.0] * self._dims] * len(batch_texts)
+                all_embeddings.extend(zeros)
+                
+                # 連続エラーを防ぐため少し長く待機
+                time.sleep(2.0)
 
         elapsed_total = time.time() - start_time
         logger.info(f"[Embedding] 完了: {total}件, 所要時間={elapsed_total:.1f}秒")
