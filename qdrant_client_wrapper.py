@@ -33,6 +33,7 @@ from helper_embedding import (
     DEFAULT_GEMINI_EMBEDDING_DIMS,
     DEFAULT_OPENAI_EMBEDDING_DIMS,
 )
+from helper_embedding_sparse import get_sparse_embedding_client
 
 # 共通モジュール
 try:
@@ -352,7 +353,8 @@ def create_or_recreate_collection(
     client: QdrantClient,
     name: str,
     recreate: bool = False,
-    vector_size: int = DEFAULT_VECTOR_SIZE
+    vector_size: int = DEFAULT_VECTOR_SIZE,
+    use_sparse: bool = False
 ):
     """
     コレクション作成または再作成
@@ -362,23 +364,42 @@ def create_or_recreate_collection(
         name: コレクション名
         recreate: 再作成フラグ
         vector_size: ベクトル次元数
+        use_sparse: Sparse Vector (Hybrid Search) を有効にするか
     """
+    # Dense Vector設定
     vectors_config = models.VectorParams(
         size=vector_size, distance=models.Distance.COSINE
     )
+    
+    # Sparse Vector設定
+    sparse_vectors_config = None
+    if use_sparse:
+        sparse_vectors_config = {
+            "text-sparse": models.SparseVectorParams(
+                index=models.SparseIndexParams(
+                    on_disk=False, # メモリ上に保持して高速化（大規模ならTrue）
+                )
+            )
+        }
 
     if recreate:
         try:
             client.delete_collection(collection_name=name)
         except Exception:
             pass
-        client.create_collection(collection_name=name, vectors_config=vectors_config)
+        client.create_collection(
+            collection_name=name, 
+            vectors_config=vectors_config,
+            sparse_vectors_config=sparse_vectors_config
+        )
     else:
         try:
             client.get_collection(name)
         except Exception:
             client.create_collection(
-                collection_name=name, vectors_config=vectors_config
+                collection_name=name, 
+                vectors_config=vectors_config,
+                sparse_vectors_config=sparse_vectors_config
             )
 
     # ペイロード索引を作成
@@ -582,11 +603,84 @@ def embed_query_unified(
     return embedding_client.embed_text(text)
 
 
+def embed_sparse_texts_unified(
+    texts: List[str],
+    model_name: str = None,
+    batch_size: int = 32
+) -> List[models.SparseVector]:
+    """
+    テキストをSparse Embedding (キーワードベクトル) に変換
+
+    Args:
+        texts: テキストリスト
+        model_name: 使用するSparseモデル（Noneの場合はデフォルト）
+        batch_size: バッチサイズ
+
+    Returns:
+        Qdrant用SparseVectorオブジェクトのリスト
+    """
+    sparse_client = get_sparse_embedding_client(model_name)
+    
+    # 空文字列・空白のみの文字列を除外して処理
+    valid_texts = []
+    valid_indices = []
+    for i, text in enumerate(texts):
+        if text and text.strip():
+            valid_texts.append(text)
+            valid_indices.append(i)
+
+    if not valid_texts:
+        return [models.SparseVector(indices=[], values=[])] * len(texts)
+
+    # Sparse Embedding生成
+    raw_sparse_vecs = sparse_client.embed_texts(valid_texts, batch_size=batch_size)
+
+    # Qdrantモデルに変換して元の順序に戻す
+    sparse_vecs: List[models.SparseVector] = []
+    valid_vec_idx = 0
+    
+    for i in range(len(texts)):
+        if i in valid_indices:
+            raw = raw_sparse_vecs[valid_vec_idx]
+            sparse_vecs.append(models.SparseVector(
+                indices=raw["indices"],
+                values=raw["values"]
+            ))
+            valid_vec_idx += 1
+        else:
+            sparse_vecs.append(models.SparseVector(indices=[], values=[]))
+
+    return sparse_vecs
+
+
+def embed_sparse_query_unified(
+    text: str,
+    model_name: str = None
+) -> models.SparseVector:
+    """
+    クエリテキストをSparse Embeddingに変換
+
+    Args:
+        text: クエリテキスト
+        model_name: 使用するSparseモデル
+
+    Returns:
+        Qdrant用SparseVector
+    """
+    sparse_client = get_sparse_embedding_client(model_name)
+    raw = sparse_client.embed_text(text)
+    return models.SparseVector(
+        indices=raw["indices"],
+        values=raw["values"]
+    )
+
+
 def create_collection_for_provider(
     client: QdrantClient,
     name: str,
     provider: str = None,
-    recreate: bool = False
+    recreate: bool = False,
+    use_sparse: bool = False
 ):
     """
     プロバイダーに応じた次元数でコレクションを作成
@@ -598,24 +692,23 @@ def create_collection_for_provider(
         name: コレクション名
         provider: "gemini" or "openai"
         recreate: 再作成フラグ
+        use_sparse: Hybrid Search用Sparse Vectorを有効化
 
     Example:
-        # Gemini用コレクション（3072次元）
-        create_collection_for_provider(client, "qa_gemini", provider="gemini")
-
-        # OpenAI用コレクション（1536次元）
-        create_collection_for_provider(client, "qa_openai", provider="openai")
+        # Gemini用コレクション（3072次元 + Sparse）
+        create_collection_for_provider(client, "qa_gemini", provider="gemini", use_sparse=True)
     """
     provider = provider or DEFAULT_EMBEDDING_PROVIDER
     vector_size = get_embedding_dimensions(provider)
 
-    logger.info(f"Creating collection '{name}' with {vector_size} dimensions (provider: {provider})")
+    logger.info(f"Creating collection '{name}' with {vector_size} dimensions (provider: {provider}, sparse: {use_sparse})")
 
     create_or_recreate_collection(
         client=client,
         name=name,
         recreate=recreate,
-        vector_size=vector_size
+        vector_size=vector_size,
+        use_sparse=use_sparse
     )
 
 
@@ -903,37 +996,87 @@ def search_collection(
     client: QdrantClient,
     collection_name: str,
     query_vector: List[float],
-    limit: int = 5
+    sparse_vector: Optional[models.SparseVector] = None,
+    limit: int = 5,
+    hybrid_alpha: float = 0.5
 ) -> List[Dict[str, Any]]:
     """
-    コレクションを検索
+    コレクションを検索（Dense または Hybrid）
+
     Args:
         client: Qdrantクライアント
         collection_name: コレクション名
-        query_vector: クエリベクトル
+        query_vector: クエリベクトル (Dense)
+        sparse_vector: クエリSparseベクトル (Optional) - 指定された場合Hybrid検索
         limit: 結果数上限
+        hybrid_alpha: Hybrid検索時の重み (現状は単純なFusionロジックがないため未使用、将来用)
+
     Returns:
         検索結果のリスト
     """
-    # Qdrant Client v2.x対応: query_pointsを使用
     try:
-        # 新API (v2.x)
-        response = client.query_points(
-            collection_name=collection_name,
-            query=query_vector,
-            limit=limit
-        )
-        hits = response.points
-    except AttributeError:
-        # 旧API (v1.x) へのフォールバック
-        import warnings
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            hits = client.search(
+        if sparse_vector:
+            # Hybrid Search (Dense + Sparse)
+            # Qdrant 1.10+ の Query API を使用して RRF (Reciprocal Rank Fusion) を行うのが理想的だが
+            # 互換性のため、ここでは単純な Prefetch と Rescore、あるいはそれぞれの結果を取得する方式を検討
+            # 現時点では、Qdrant Client v1.10 の prefetch 機能を想定した実装にする
+            
+            # 注: Qdrantのバージョン依存が強いため、ここでは安全に
+            # search_batch で Dense と Sparse を別々に投げてPython側で統合するか、
+            # 新しい query_points API を使う。
+            
+            # query_points API (v1.10+) が使えると仮定
+            prefetch = [
+                models.Prefetch(
+                    query=query_vector,
+                    using="default", # Dense vector name (default)
+                    limit=limit * 2,
+                ),
+                models.Prefetch(
+                    query=sparse_vector,
+                    using="text-sparse", # Sparse vector name
+                    limit=limit * 2,
+                ),
+            ]
+            
+            response = client.query_points(
                 collection_name=collection_name,
-                query_vector=query_vector,
-                limit=limit
+                prefetch=prefetch,
+                query=models.FusionQuery(
+                    method=models.Fusion.RRF, # Reciprocal Rank Fusion
+                ),
+                limit=limit,
             )
+            hits = response.points
+            
+        else:
+            # Standard Dense Search
+            try:
+                # 新API (v2.x/1.10+)
+                response = client.query_points(
+                    collection_name=collection_name,
+                    query=query_vector,
+                    limit=limit
+                )
+                hits = response.points
+            except AttributeError:
+                # 旧API (v1.x) へのフォールバック
+                import warnings
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", DeprecationWarning)
+                    hits = client.search(
+                        collection_name=collection_name,
+                        query_vector=query_vector,
+                        limit=limit
+                    )
+
+    except Exception as e:
+        logger.error(f"Search failed: {e}")
+        # フォールバック: Denseのみで再試行、または空を返す
+        if sparse_vector:
+            logger.info("Falling back to dense-only search due to error.")
+            return search_collection(client, collection_name, query_vector, limit=limit)
+        return []
 
     results = []
     for h in hits:

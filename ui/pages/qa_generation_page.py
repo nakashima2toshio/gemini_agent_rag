@@ -106,9 +106,9 @@ def show_qa_generation_page():
                 "Celeryワーカー数",
                 min_value=1,
                 max_value=48,
-                value=8,  # Gemini APIレート制限対策のためデフォルトを8に設定
+                value=24,  # Gemini APIレート制限対策のためデフォルトを24に設定
                 step=1,
-                help="並列処理するワーカー数（Gemini推奨: 8）",
+                help="並列処理するワーカー数（Gemini推奨: 24）",
             )
         else:
             celery_workers = 1

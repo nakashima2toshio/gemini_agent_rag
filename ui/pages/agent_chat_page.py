@@ -310,7 +310,7 @@ def run_agent_turn(chat_session: ChatSession, user_input: str) -> str:
 
 def show_agent_chat_page():
     st.title("🤖 エージェント対話 (Agent Chat)")
-    st.caption("Gemini 2.0 Flash + ReAct + Qdrant Hybrid RAG")
+    st.caption("Gemini 2.0 Flash + ReAct + Qdrant Hybrid RAG (Dense + Sparse)")
 
     # 1. サイドバー設定
     with st.sidebar:
@@ -323,23 +323,11 @@ def show_agent_chat_page():
             st.warning("利用可能なコレクションが見つかりません。Qdrantサーバーを確認してください。")
             all_collections = ["(None)"]
         
-        # 表示用のフォーマット関数
-        def format_collection_name(name: str) -> str:
-            # 長い接頭辞を省略して表示
-            prefixes_to_remove = ["qa_a02_qa_pairs_", "qa_a03_qa_pairs_", "qa_a10_qa_pairs_", "qa_"]
-            display_name = name
-            for prefix in prefixes_to_remove:
-                if display_name.startswith(prefix):
-                    display_name = display_name[len(prefix):]
-                    break
-            return display_name if display_name == name else f"...{display_name}"
-
-        # 検索対象コレクションの選択（マルチセレクトに戻す）
+        # 検索対象コレクションの選択（マルチセレクトに変更）
         selected_collections = st.multiselect(
             "検索対象コレクション (Target Collections)",
             options=all_collections,
             default=all_collections if all_collections != ["(None)"] else [], # デフォルトは全て選択
-            format_func=format_collection_name, # 名前を短縮表示
             help="エージェントが検索ツールを使用する際に、候補として提示されるコレクションです。"
         )
         

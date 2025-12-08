@@ -25,6 +25,10 @@ from typing import Dict, List, Any, Optional, Tuple, Iterable
 import pandas as pd
 import tiktoken
 from helper_embedding import create_embedding_client, get_embedding_dimensions
+from qdrant_client_wrapper import (
+    embed_sparse_texts_unified, 
+    create_or_recreate_collection
+)
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 from qdrant_client.http.exceptions import UnexpectedResponse
@@ -619,25 +623,62 @@ def embed_texts_for_qdrant(
 
 
 def create_or_recreate_collection_for_qdrant(
-    client: QdrantClient, name: str, recreate: bool, vector_size: int = 3072
+    client: QdrantClient, name: str, recreate: bool, vector_size: int = 3072, use_sparse: bool = False
 ):
-    """コレクション作成または再作成"""
+    """
+    コレクション作成または再作成
+    
+    Args:
+        client: QdrantClient
+        name: コレクション名
+        recreate: 再作成フラグ
+        vector_size: ベクトル次元数
+        use_sparse: Sparse Vector (Hybrid Search) を有効にするか
+    """
+    # Dense Vector設定
     vectors_config = models.VectorParams(
         size=vector_size, distance=models.Distance.COSINE
     )
+    
+    # Hybrid Search (Named Vectors) の場合、"default" という名前でDenseを設定するのがベストプラクティスだが
+    # 既存との互換性のため、vectors_configを辞書にする
+    if use_sparse:
+        vectors_config = {
+            "default": models.VectorParams(
+                size=vector_size, 
+                distance=models.Distance.COSINE
+            )
+        }
+    
+    # Sparse Vector設定
+    sparse_vectors_config = None
+    if use_sparse:
+        sparse_vectors_config = {
+            "text-sparse": models.SparseVectorParams(
+                index=models.SparseIndexParams(
+                    on_disk=False, 
+                )
+            )
+        }
 
     if recreate:
         try:
             client.delete_collection(collection_name=name)
         except Exception:
             pass
-        client.create_collection(collection_name=name, vectors_config=vectors_config)
+        client.create_collection(
+            collection_name=name, 
+            vectors_config=vectors_config,
+            sparse_vectors_config=sparse_vectors_config
+        )
     else:
         try:
             client.get_collection(name)
         except Exception:
             client.create_collection(
-                collection_name=name, vectors_config=vectors_config
+                collection_name=name, 
+                vectors_config=vectors_config,
+                sparse_vectors_config=sparse_vectors_config
             )
 
     # ペイロード索引を作成
@@ -650,12 +691,31 @@ def create_or_recreate_collection_for_qdrant(
 
 
 def build_points_for_qdrant(
-    df: pd.DataFrame, vectors: List[List[float]], domain: str, source_file: str
+    df: pd.DataFrame, 
+    vectors: List[List[float]], 
+    domain: str, 
+    source_file: str,
+    sparse_vectors: Optional[List[models.SparseVector]] = None
 ) -> List[models.PointStruct]:
-    """Qdrantポイントを構築"""
+    """
+    Qdrantポイントを構築
+
+    Args:
+        df: DataFrame
+        vectors: Dense埋め込みベクトル
+        domain: ドメイン名
+        source_file: ソースファイル名
+        sparse_vectors: Sparse埋め込みベクトル (Optional)
+
+    Returns:
+        PointStructのリスト
+    """
     n = len(df)
     if len(vectors) != n:
         raise ValueError(f"vectors length mismatch: df={n}, vecs={len(vectors)}")
+    
+    if sparse_vectors and len(sparse_vectors) != n:
+        raise ValueError(f"sparse_vectors length mismatch: df={n}, sparse_vecs={len(sparse_vectors)}")
 
     now_iso = datetime.now(timezone.utc).isoformat()
     points: List[models.PointStruct] = []
@@ -671,7 +731,21 @@ def build_points_for_qdrant(
         }
 
         pid = abs(hash(f"{domain}-{source_file}-{i}")) & 0x7FFFFFFFFFFFFFFF
-        points.append(models.PointStruct(id=pid, vector=vectors[i], payload=payload))
+        
+        # ベクトル構造の構築
+        if sparse_vectors:
+            # Hybrid Search用 Named Vectors
+            # "default": Dense Vector (Gemini/OpenAI)
+            # "text-sparse": Sparse Vector (Splade)
+            vector_struct = {
+                "default": vectors[i],
+                "text-sparse": sparse_vectors[i]
+            }
+        else:
+            # Single Dense Vector (Legacy)
+            vector_struct = vectors[i]
+
+        points.append(models.PointStruct(id=pid, vector=vector_struct, payload=payload))
 
     return points
 

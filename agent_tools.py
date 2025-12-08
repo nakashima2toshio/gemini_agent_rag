@@ -7,7 +7,7 @@ from typing import List, Optional, Dict, Any, Union
 from dataclasses import dataclass, field
 from qdrant_client import QdrantClient
 from qdrant_client.http.exceptions import UnexpectedResponse, ResponseHandlingException
-from qdrant_client_wrapper import search_collection, embed_query, QDRANT_CONFIG
+from qdrant_client_wrapper import search_collection, embed_query, embed_sparse_query_unified, QDRANT_CONFIG
 from config import AgentConfig
 
 logger = logging.getLogger(__name__) # Configure logger for this module
@@ -160,11 +160,17 @@ def search_rag_knowledge_base(
         query_vector: List[float] = embed_query(query) # Assuming embed_query returns List[float]
         if query_vector is None:
             raise EmbeddingError("クエリの埋め込み生成に失敗しました。")
+            
+        # Sparse Vector生成 (Hybrid Search用)
+        # 常に生成するが、検索時にコレクション側が対応していなければ無視される可能性がある
+        # エラーハンドリングは qdrant_client_wrapper 側で吸収することを期待
+        sparse_vector = embed_sparse_query_unified(query)
 
         results: List[Dict[str, Any]] = search_collection( # Assuming search_collection returns List[Dict[str, Any]]
             client=client,
             collection_name=collection_name,
             query_vector=query_vector,
+            sparse_vector=sparse_vector,
             limit=AgentConfig.RAG_SEARCH_LIMIT
         )
 

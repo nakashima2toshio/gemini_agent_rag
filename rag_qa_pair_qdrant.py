@@ -129,9 +129,7 @@ def main():
             }[x],
             label_visibility="collapsed",
         )
-        st.divider() # <-- Added after st.radio
-
-        st.divider() # Original divider
+        st.divider() # Removed one of the two consecutive dividers
 
 
     # 選択された画面を表示

@@ -29,6 +29,9 @@ from services.qdrant_service import (
     build_points_for_qdrant,
     upsert_points_to_qdrant,
 )
+# Wrapperから直接インポート (Sparse用)
+from qdrant_client_wrapper import embed_sparse_texts_unified
+from helper_embedding import get_embedding_dimensions, DEFAULT_EMBEDDING_PROVIDER
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +129,12 @@ def show_qdrant_registration_page():
             step=100,
             help="テスト用に登録件数を制限する場合に使用します",
         )
+        
+        use_hybrid_search = st.checkbox(
+            "Hybrid Search (Sparse Vector) を有効にする",
+            value=True,
+            help="キーワード検索用のSparse Vectorも生成・登録します（検索精度が向上します）"
+        )
 
     # ファイル情報表示
     csv_path = qa_output_dir / selected_csv
@@ -184,19 +193,35 @@ def show_qdrant_registration_page():
             # ステップ2: コレクション作成
             with st.spinner("🗄️ コレクション準備中..."):
                 add_log(f"🗄️ コレクション準備: {collection_name}")
+                
+                # 次元数をプロバイダーから取得
+                vector_size = get_embedding_dimensions(DEFAULT_EMBEDDING_PROVIDER)
+                
                 create_or_recreate_collection_for_qdrant(
-                    client, collection_name, recreate_collection
+                    client, 
+                    collection_name, 
+                    recreate_collection,
+                    vector_size=vector_size,
+                    use_sparse=use_hybrid_search
                 )
-                add_log("✅ コレクション準備完了")
+                add_log(f"✅ コレクション準備完了 (Sparse: {use_hybrid_search})")
 
-            # ステップ3: 埋め込み生成
-            with st.spinner("🔢 埋め込み生成中..."):
-                add_log("🔢 埋め込み生成開始")
+            # ステップ3: 埋め込み生成 (Dense)
+            with st.spinner("🔢 Dense埋め込み生成中..."):
+                add_log("🔢 Dense埋め込み生成開始")
                 texts = build_inputs_for_embedding(df, include_answer)
                 vectors = embed_texts_for_qdrant(
-                    texts, model="gemini-embedding-001"
+                    texts, model="gemini-embedding-001" # model引数は互換性のため残るが内部でprovider使用
                 )
-                add_log(f"✅ {len(vectors)} 件の埋め込みを生成しました")
+                add_log(f"✅ {len(vectors)} 件のDense埋め込みを生成しました")
+            
+            # ステップ3.5: Sparse埋め込み生成
+            sparse_vectors = None
+            if use_hybrid_search:
+                with st.spinner("🔠 Sparse埋め込み生成中 (FastEmbed)..."):
+                    add_log("🔠 Sparse埋め込み生成開始 (FastEmbed)")
+                    sparse_vectors = embed_sparse_texts_unified(texts)
+                    add_log(f"✅ {len(sparse_vectors)} 件のSparse埋め込みを生成しました")
 
             # ステップ4: ポイント構築
             with st.spinner("📦 ポイント構築中..."):
@@ -209,7 +234,13 @@ def show_qdrant_registration_page():
                 else:
                     domain = "custom"
 
-                points = build_points_for_qdrant(df, vectors, domain, selected_csv)
+                points = build_points_for_qdrant(
+                    df, 
+                    vectors, 
+                    domain, 
+                    selected_csv,
+                    sparse_vectors=sparse_vectors
+                )
                 add_log(f"✅ {len(points)} 個のポイントを構築しました")
 
             # ステップ5: Qdrantアップサート
