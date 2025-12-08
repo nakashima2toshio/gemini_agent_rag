@@ -49,7 +49,7 @@
 | 比較項目 | OpenAI<br>(text-embedding-3-large) | Gemini<br>(gemini-embedding-001) | 備考・勝者 |
 | :--- | :--- | :--- | :--- |
 | **出力次元数** | **デフォルト 3072**<br>(256, 1024等へ短縮可能) | **デフォルト 3072**<br>(768, 1536等へ短縮可能) | **引き分け**<br>両者ともデフォルト3072次元の高次元ベクトルを提供し、MRLによる短縮に対応。 |
-| **コスト (Paid)** | **$0.13 / 1M tokens** | ~$0.025 / 1M **chars**<br>(Vertex AI) | **Gemini**<br>OpenAIのLargeモデルはSmallの約6.5倍の価格。<br>Geminiはモデルサイズに関わらず一律料金（文字数ベース）のため、高次元利用ならGeminiが圧倒的に有利。 |
+| **コスト (Paid)** | **$0.13 / 1M tokens** | ~$0.025 / 1M **chars**<br>(Vertex AI)<br>~$0.0375 / 1M **chars**<br>(Gemini API) | **Gemini**<br>OpenAIのLargeモデルはSmallの約6.5倍の価格。<br>Geminiはモデルサイズに関わらず一律料金（文字数ベース）のため、高次元利用ならGeminiが圧倒的に有利。 |
 | **精度 (Retrieval)** | 非常に高い | 非常に高い | **Gemini (日本語)**<br>日本語を含む多言語タスクではGeminiが優勢な傾向。<br>英語タスクではOpenAIも極めて強力。 |
 | **運用特性** | バッチ2048件 / 入力8191トークン | バッチ100件 / 入力2048トークン | **OpenAI**<br>運用面（バッチ処理・長文対応）での使い勝手はOpenAIが変わらず優位。 |
 

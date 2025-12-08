@@ -302,11 +302,13 @@ def generate_qa_unified_async(
     try:
         provider = provider or DEFAULT_LLM_PROVIDER
 
-        # レート制限対策: Gemini API呼び出し前に短い遅延を追加
+        # レート制限対策: Gemini API呼び出し前に短い遅延を追加（短縮版）
         if provider == "gemini":
             import time
             import random
-            delay = random.uniform(0.5, 1.5)  # 0.5〜1.5秒のランダム遅延
+            # ワーカー増強に伴い、初期遅延を短縮してスループットを向上
+            # エラー時は指数バックオフで調整する方針
+            delay = random.uniform(0.1, 0.5)
             time.sleep(delay)
 
         # Geminiプロバイダー使用時にOpenAIモデル名が渡された場合はデフォルトモデルを使用
@@ -416,11 +418,19 @@ Output in JSON format:
         }
 
     except Exception as e:
-        logger.error(f"[統合タスク] エラー: {str(e)}")
+        # エラーログ出力（429等のレート制限エラーを含む）
+        logger.error(f"[統合タスク] エラー (Provider: {provider}): {str(e)}")
 
-        # リトライ処理
+        # リトライ処理（指数バックオフ）
         if self.request.retries < self.max_retries:
-            raise self.retry(exc=e, countdown=5 * (self.request.retries + 1))
+            # countdown = 2^retries * base_seconds (例: 2, 4, 8秒...) + jitter
+            import random
+            backoff = (2 ** self.request.retries) * 2
+            jitter = random.uniform(0, 1)
+            countdown = backoff + jitter
+            
+            logger.info(f"[リトライ] {countdown:.1f}秒後にリトライします (回数: {self.request.retries + 1}/{self.max_retries})")
+            raise self.retry(exc=e, countdown=countdown)
 
         return {
             "success": False,

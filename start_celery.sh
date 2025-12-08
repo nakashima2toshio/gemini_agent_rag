@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # デフォルト設定
-WORKERS=8
+WORKERS=24
 LOG_LEVEL="info"
 QUEUE_NAME="qa_generation"
 

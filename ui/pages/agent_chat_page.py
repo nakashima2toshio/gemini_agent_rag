@@ -85,6 +85,26 @@ SYSTEM_INSTRUCTION_TEMPLATE = """
     *   検索結果に基づく回答の場合、「社内ナレッジによると...」や「ソース [ファイル名] によると...」と出典を明示してください。
 """
 
+REFLECTION_INSTRUCTION = """
+## Reflection (自己評価と修正)
+
+あなたは上記で作成した「回答案」を、以下の基準で客観的に評価し、必要であれば修正してください。
+
+**チェックリスト:**
+1.  **正確性:** 検索結果(もしあれば)に基づいているか？ 提供された情報源に含まれない情報を捏造していないか？
+2.  **回答の適切性:** ユーザーの質問に直接的かつ明確に答えているか？
+3.  **スタイル:** 親しみやすく、丁寧な日本語（です・ます調）か？ 箇条書きなどを活用して読みやすいか？
+
+**指示:**
+*   修正が不要な場合でも、必ず **Final Answer** を出力してください。
+*   修正が必要な場合は、修正後の回答を **Final Answer** として出力してください。
+*   思考プロセスは `Thought:` で始めてください。
+
+**出力フォーマット:**
+Thought: [評価と修正の思考プロセス]
+Final Answer: [最終的な回答]
+"""
+
 # ツールのマッピング
 TOOLS_MAP = {
     'search_rag_knowledge_base': search_rag_knowledge_base,
@@ -214,10 +234,57 @@ def run_agent_turn(chat_session: ChatSession, user_input: str) -> str:
                 break # response.parts のループを抜けて、次のモデル応答を処理
         
         if not function_call_found:
-            # ツール呼び出しがなかった場合、現在のモデルのテキストが最終回答となる
+            # ツール呼び出しがなかった場合、現在のモデルのテキストが最終回答案(Draft)となる
             final_response_text = current_turn_text_from_model
             break
             
+    # -------------------------------------------------------------------------
+    # Phase 2: Reflection (自己洗練)
+    # ReActで生成された回答案(final_response_text)を評価・修正する
+    # -------------------------------------------------------------------------
+    if final_response_text:
+        with st.spinner("回答を推敲中 (Reflection)..."):
+            try:
+                # 思考ログへの区切り線
+                thought_log.append("---")
+                thought_log.append("🔄 **Reflection Phase (推敲)**")
+
+                # Reflectionプロンプトの送信
+                reflection_msg = f"{REFLECTION_INSTRUCTION}\n\n**あなたの回答案:**\n{final_response_text}"
+                reflection_response = chat_session.send_message(reflection_msg)
+                
+                reflection_text = reflection_response.text.strip()
+                
+                # 思考と回答の分離
+                reflection_thought = ""
+                reflection_answer = ""
+
+                if "Final Answer:" in reflection_text:
+                    parts = reflection_text.split("Final Answer:", 1)
+                    reflection_thought = parts[0].strip()
+                    reflection_answer = parts[1].strip()
+                else:
+                    # フォーマット崩れの場合はそのまま採用
+                    reflection_thought = "Format mismatch in reflection."
+                    reflection_answer = reflection_text
+
+                # ログに追加
+                if reflection_thought:
+                    # Thought: タグがあれば除去して綺麗にする
+                    clean_thought = reflection_thought.replace("Thought:", "").strip()
+                    thought_log.append(f"🤔 **Reflection Thought:**\n{clean_thought}")
+                    logger.info(f"Reflection Thought: {clean_thought}")
+
+                if reflection_answer:
+                    # 最終回答を更新
+                    final_response_text = reflection_answer
+                    logger.info(f"Reflection Answer: {reflection_answer}")
+
+            except Exception as e:
+                logger.error(f"Error during reflection phase: {e}")
+                thought_log.append(f"⚠️ **Reflection Error:** {str(e)}")
+                # エラー時はDraftをそのまま使う
+
     # 思考プロセスをexpanderで表示
     if thought_log:
         with st.expander("🤔 エージェントの思考プロセス (Click to open)", expanded=False):

@@ -11,7 +11,7 @@ streamlit run rag_qa_pair_qdrant.py --server.port=8500
 
 # 事前準備（必要な場合）
 1. Qdrantサーバー起動: docker-compose -f docker-compose/docker-compose.yml up -d
-2. Celeryワーカー起動: redis-cli FLUSHDB && ./start_celery.sh restart -w 8
+2. Celeryワーカー起動: redis-cli FLUSHDB && ./start_celery.sh restart -w 16
 3. Flower監視（任意）: celery -A celery_config flower --port=5555
 
 ================================================================================

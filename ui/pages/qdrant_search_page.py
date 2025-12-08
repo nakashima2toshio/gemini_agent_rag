@@ -185,6 +185,7 @@ def show_qdrant_search_page():
 
             # Qdrantで検索
             with st.spinner("検索中..."):
+                hits = []
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", DeprecationWarning)
                     hits = client.search(
