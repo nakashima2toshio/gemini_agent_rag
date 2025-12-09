@@ -282,6 +282,11 @@ def create_embedding_client(
         # FastEmbed (Local, default 384 dims)
         embedding = create_embedding_client("fastembed")
     """
+    # Noneチェックとデフォルト値の設定
+    if provider is None:
+        logger.warning("Provider is None. Defaulting to 'gemini'.")
+        provider = "gemini"
+
     if provider.lower() == "openai":
         return OpenAIEmbedding(**kwargs)
     elif provider.lower() == "gemini":
@@ -318,13 +323,15 @@ def get_embedding_dimensions(provider: str = "gemini") -> int:
     Returns:
         次元数
     """
+    if provider is None:
+        provider = "gemini"
+
     if provider.lower() == "gemini":
         return DEFAULT_GEMINI_EMBEDDING_DIMS  # 3072
     elif provider.lower() == "openai":
         return DEFAULT_OPENAI_EMBEDDING_DIMS  # 1536
     elif provider.lower() == "fastembed":
-        # FastEmbedのデフォルト次元数（モデルによって異なるが、ここではデフォルトモデルの値を返す）
-        # 厳密にはモデル指定が必要だが、簡易的にデフォルト値を返す
+        # FastEmbedのデフォルト次元数（モデルによって異なるが、ここではデフォルト値を返す）
         return 384 
     else:
         raise ValueError(f"Unknown provider: {provider}")

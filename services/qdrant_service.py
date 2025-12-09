@@ -771,9 +771,34 @@ def upsert_points_to_qdrant(
 def embed_query_for_search(
     query: str, model: str = "gemini-embedding-001", dims: Optional[int] = None
 ) -> List[float]:
-    """検索クエリをベクトル化（Gemini API使用）"""
-    embedding_client = create_embedding_client(provider="gemini")
-    return embedding_client.embed_text(query)
+    """
+    検索クエリをベクトル化
+    
+    次元数(dims)またはモデル名(model)に基づいてプロバイダーを自動選択します。
+    """
+    # デフォルトはGemini
+    provider = "gemini"
+    
+    # 次元数による判定
+    if dims == 1536:
+        provider = "openai"
+    elif dims == 3072:
+        provider = "gemini"
+    
+    # モデル名による判定 (次元数が指定されていない場合のフォールバック)
+    elif model:
+        if "text-embedding-3" in model or "text-embedding-ada" in model:
+            provider = "openai"
+        elif "gemini" in model:
+            provider = "gemini"
+            
+    logger.info(f"embed_query_for_search: query='{query}', model='{model}', dims={dims} -> provider='{provider}'")
+    
+    embedding_client = create_embedding_client(provider=provider)
+    vector = embedding_client.embed_text(query)
+    
+    logger.info(f"embed_query_for_search: generated vector dim={len(vector)}")
+    return vector
 
 
 # ===================================================================

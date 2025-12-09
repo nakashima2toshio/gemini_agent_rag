@@ -25,7 +25,7 @@ from services.qdrant_service import (
     get_collection_embedding_params,
 )
 from services.file_service import load_source_qa_data
-
+from qdrant_client_wrapper import search_collection, embed_sparse_query_unified # Import search_collection and embed_sparse_query_unified
 
 def show_qdrant_search_page():
     """画面5: Qdrant検索"""
@@ -97,6 +97,9 @@ def show_qdrant_search_page():
         topk = st.slider(
             "検索結果数（Top-K）", min_value=1, max_value=20, value=5, step=1
         )
+        
+        # ハイブリッド検索の有効化トグル
+        use_hybrid_search = st.checkbox("⚙️ ハイブリッド検索を有効にする (Sparse + Dense)", value=False)
 
         # デバッグモード
         debug_mode = st.checkbox("🐛 デバッグモード", value=False)
@@ -176,6 +179,13 @@ def show_qdrant_search_page():
 
             if debug_mode:
                 st.info(f"🔍 使用モデル: {embedding_model} ({embedding_dims}次元)")
+                try:
+                    # コレクション設定のデバッグ表示
+                    col_info_debug = client.get_collection(collection)
+                    st.markdown("**📋 コレクション設定 (Debug):**")
+                    st.json(col_info_debug.model_dump() if hasattr(col_info_debug, 'model_dump') else col_info_debug.dict())
+                except Exception as e:
+                    st.error(f"コレクション設定の取得に失敗: {e}")
 
             # クエリを埋め込みベクトルに変換
             with st.spinner("埋め込みベクトルを生成中..."):
@@ -185,12 +195,33 @@ def show_qdrant_search_page():
 
             # Qdrantで検索
             with st.spinner("検索中..."):
-                hits = []
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore", DeprecationWarning)
-                    hits = client.search(
-                        collection_name=collection, query_vector=qvec, limit=topk
-                    )
+                sparse_vector = None
+                if use_hybrid_search:
+                    with st.spinner("Sparseベクトルを生成中..."):
+                        # sparse_vector生成
+                        sparse_vector = embed_sparse_query_unified(query)
+                        if debug_mode:
+                            st.success("✅ Sparseベクトルを生成しました")
+                
+                # search_collection関数を呼び出し
+                hits_dict_list = search_collection( # search_collection returns List[Dict[str, Any]]
+                    client=client,
+                    collection_name=collection,
+                    query_vector=qvec,
+                    sparse_vector=sparse_vector if use_hybrid_search else None, # ハイブリッド検索が有効な場合のみSparseベクトルを渡す
+                    limit=topk
+                )
+            
+            # search_collectionの戻り値はDictのリストなので、QdrantのPointStructに変換 (UI表示のため)
+            class MockHit: # 既存のUI表示ロジックに合わせるため
+                def __init__(self, hit_dict):
+                    self.score = hit_dict.get("score", 0.0)
+                    self.id = hit_dict.get("id")
+                    self.payload = hit_dict.get("payload")
+            
+            hits = [MockHit(h) for h in hits_dict_list]
+
+            
 
             # 検索結果を表示
             st.divider()

@@ -39,6 +39,10 @@ class SparseEmbeddingClient:
         if SparseTextEmbedding is None:
             raise ImportError("FastEmbed library is missing.")
         
+        # Handle explicit None
+        if model_name is None:
+            model_name = DEFAULT_SPARSE_MODEL
+        
         logger.info(f"Initializing SparseEmbedding with model: {model_name}")
         self.model_name = model_name
         self._model = SparseTextEmbedding(
@@ -92,6 +96,10 @@ class SparseEmbeddingClient:
 _sparse_client_instance = None
 
 def get_sparse_embedding_client(model_name: str = DEFAULT_SPARSE_MODEL) -> SparseEmbeddingClient:
+    # Handle explicit None passed from callers
+    if model_name is None:
+        model_name = DEFAULT_SPARSE_MODEL
+
     global _sparse_client_instance
     if _sparse_client_instance is None:
         _sparse_client_instance = SparseEmbeddingClient(model_name=model_name)

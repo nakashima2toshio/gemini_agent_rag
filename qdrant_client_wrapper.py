@@ -1014,6 +1014,8 @@ def search_collection(
     Returns:
         検索結果のリスト
     """
+    logger.info(f"search_collection: collection='{collection_name}', query_vec_dim={len(query_vector)}, limit={limit}, sparse={sparse_vector is not None}")
+    
     try:
         if sparse_vector:
             # Hybrid Search (Dense + Sparse)
@@ -1043,7 +1045,7 @@ def search_collection(
                 collection_name=collection_name,
                 prefetch=prefetch,
                 query=models.FusionQuery(
-                    method=models.Fusion.RRF, # Reciprocal Rank Fusion
+                    fusion=models.Fusion.RRF, # Corrected parameter name from 'method' to 'fusion'
                 ),
                 limit=limit,
             )
@@ -1072,12 +1074,40 @@ def search_collection(
 
     except Exception as e:
         logger.error(f"Search failed: {e}")
-        # フォールバック: Denseのみで再試行、または空を返す
+        # フォールバック: Denseのみで再試行
         if sparse_vector:
             logger.info("Falling back to dense-only search due to error.")
-            return search_collection(client, collection_name, query_vector, limit=limit)
+            # 再帰呼び出しではなく、直接Dense検索を実行して無限ループや再帰エラーを防ぐ
+            # また、"Vector with name default is not configured" エラーへの対策として
+            # 名前付きベクトル ("default") を指定しないシンプルな検索を行う
+            try:
+                # v1.10+ / v1.16+ client: search() is removed/deprecated in favor of query_points
+                # For single vector (unnamed), pass the list[float] directly to query
+                response = client.query_points(
+                    collection_name=collection_name,
+                    query=query_vector,
+                    limit=limit
+                )
+                hits = response.points
+                
+                # PointStruct -> Dict 変換 (下流の処理と合わせる)
+                results = []
+                for h in hits:
+                    results.append({
+                        "score": h.score,
+                        "id": h.id,
+                        "payload": h.payload
+                    })
+                logger.info(f"search_collection (fallback): found {len(results)} hits")
+                return results
+                
+            except Exception as fallback_e:
+                 logger.error(f"Fallback search also failed: {fallback_e}")
+                 return []
         return []
 
+    logger.info(f"search_collection: found {len(hits)} hits")
+    
     results = []
     for h in hits:
         results.append({

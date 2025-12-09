@@ -451,7 +451,7 @@ class AgentConfig:
         # Add other relevant collection names here
     ]
     RAG_SEARCH_LIMIT: int = 3
-    RAG_SCORE_THRESHOLD: float = 0.70  # 検索結果として採用する最小スコア
+    RAG_SCORE_THRESHOLD: float = 0.50  # 検索結果として採用する最小スコア (0.7 -> 0.5に緩和)
 
     # エージェントモデル設定
     MODEL_NAME: str = GeminiConfig.DEFAULT_MODEL

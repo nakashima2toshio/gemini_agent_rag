@@ -10,6 +10,7 @@ Qdrant 上のナレッジベース（コレクション）を動的に選択し�
 import os
 import logging
 import streamlit as st
+import pandas as pd
 import google.generativeai as genai
 from google.generativeai import ChatSession, GenerativeModel
 from typing import Dict, List, Any, Optional, Union, Tuple
@@ -62,16 +63,15 @@ SYSTEM_INSTRUCTION_TEMPLATE = """
     *   質問の言語と内容に応じて、最適なコレクションを選択してください。
     *   **`cc_news`**: **英語 (English)** のニュース記事。 **英語の質問にはまずこれを使用してください。検索クエリも英語のままにしてください。**
     *   **`wikipedia_ja`**: 日本語 (Japanese) の百科事典。一般的な知識や定義。
-    *   **`livedoor`**: 日本語 (Japanese) のニュース・ブログ。
-    *   **`japanese_text`**: 日本語 (Japanese) のWebテキスト。
+    *   **`livedoor`**: 日本語 (Japanese) のニュース・ブログ。**日本のニュース、エンタメ、映画などの話題にはまずこれを使用してください。**
+    *   **`japanese_text`**: 日本語 (Japanese) のWebテキスト。**他の日本語コレクションで結果が出ない場合の予備として使用してください。**
 
 3.  **再試行戦略 (Multi-turn Strategy)**:
-    *   **Step 1 (初回検索):** 質問の言語に合ったコレクションを選びます。(英語なら `cc_news`、日本語ならその他)
+    *   **Step 1 (初回検索):** 質問内容に最も適したコレクションを選びます。(英語なら `cc_news`、日本のニュース・エンタメなら `livedoor`、一般知識なら `wikipedia`)
     *   **Step 2 (結果の評価):** もし検索結果が `[[NO_RAG_RESULT]]` (結果なし) だった場合、**すぐに諦めずに以下の戦略をとってください。**
-        *   **コレクション変更 (言語):** 英語の質問で日本語コレクションを探していた場合、英語コレクションに切り替える（またはその逆）。
-        *   **コレクション変更 (ジャンル):** ニュース系 (`livedoor`) でなければ、一般知識 (`wikipedia`) を試す。
+        *   **コレクション変更:** 別のコレクションを試してください。例えば `livedoor` で見つからなければ `wikipedia_ja` を、それでもなければ `japanese_text` を検索してください。
         *   **クエリ変更:** キーワードを少し広げる、または同義語に変えて再検索する。英語コレクションには英語で、日本語コレクションには日本語で検索するよう注意してください。
-    *   **Step 3 (諦め):** 2〜3回試行しても情報が見つからない場合のみ、「情報が見つかりませんでした」と回答してください。
+    *   **Step 3 (諦め):** 複数のコレクションを試行しても情報が見つからない場合のみ、「情報が見つかりませんでした」と回答してください。
 
 4.  **一般的な会話**:
     *   挨拶、雑談、単純な計算など、専門知識が不要な場合は、ツールを使わずに `Answer:` で直接回答してください。
@@ -311,6 +311,65 @@ def run_agent_turn(chat_session: ChatSession, user_input: str) -> str:
 def show_agent_chat_page():
     st.title("🤖 エージェント対話 (Agent Chat)")
     st.caption("Gemini 2.0 Flash + ReAct + Qdrant Hybrid RAG (Dense + Sparse)")
+
+    # -------------------------------------------------------------------------
+    # 入力クエリの参考用 Q&A表示エリア (Added)
+    # -------------------------------------------------------------------------
+    with st.expander("📚 登録済みQ&Aの参照 (入力クエリのヒント)", expanded=False):
+        st.markdown("登録されているコレクションから、質問と回答のサンプルを表示します。質問の参考にしてください。")
+        
+        # プレビュー用のコレクション取得
+        preview_collections = get_available_collections_from_qdrant()
+        
+        if preview_collections:
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                target_collection = st.selectbox(
+                    "コレクションを選択:", 
+                    preview_collections,
+                    index=0,
+                    key="preview_collection_selector"
+                )
+            
+            if target_collection:
+                try:
+                    # Qdrantクライアント接続
+                    client = QdrantClient(url=os.getenv("QDRANT_URL", "http://localhost:6333"))
+                    
+                    # 上位12件を取得
+                    points, _ = client.scroll(
+                        collection_name=target_collection,
+                        limit=12,
+                        with_payload=True,
+                        with_vectors=False
+                    )
+                    
+                    if points:
+                        data_list = []
+                        for point in points:
+                            payload = point.payload or {}
+                            data_list.append({
+                                "Question": payload.get("question", "N/A"),
+                                "Answer": payload.get("answer", "N/A")
+                            })
+                        
+                        df_preview = pd.DataFrame(data_list)
+                        st.dataframe(
+                            df_preview, 
+                            use_container_width=True, 
+                            hide_index=True,
+                            column_config={
+                                "Question": st.column_config.TextColumn("質問 (Question)", width="medium"),
+                                "Answer": st.column_config.TextColumn("回答 (Answer)", width="large"),
+                            }
+                        )
+                    else:
+                        st.info(f"コレクション '{target_collection}' にデータが見つかりませんでした。")
+                        
+                except Exception as e:
+                    st.error(f"データ取得エラー: {e}")
+        else:
+            st.warning("表示可能なコレクションがありません。Qdrantの状態を確認してください。")
 
     # 1. サイドバー設定
     with st.sidebar:
