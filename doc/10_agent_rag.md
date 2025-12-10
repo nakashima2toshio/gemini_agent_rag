@@ -1,3 +1,4 @@
+![Agent RAG](assets/agent_for_RAG.pdf)
 # Agent RAG システム
 
 本システムは、「自律型 RAG エージェント」および統合管理プラットフォームです。
@@ -9,13 +10,13 @@
 
 1. ReAct (Reasoning + Acting):
    　　エージェント自らが「考える（Reasoning）」と「行動する（Acting）」をループ
-   　　・入力プロンプトの最適化
-   　　・CoT（Chain-of-Thought)のLoop
-   　　・Hybrid RAG (Dense + Sparse)の検索
-   　　必要な情報が揃うまで自律的に検索ツール (search_rag_knowledge_base) を行使します。
+      　　・入力プロンプトの最適化
+      　　・CoT（Chain-of-Thought)のLoop
+      　　・Hybrid RAG (Dense + Sparse)の検索
+      　　必要な情報が揃うまで自律的に検索ツール (search_rag_knowledge_base) を行使します。
 2. Reflection (自己評価結果に基づき、最終回答 (Final Answer) を抽出：自己省察):
    　　回答を作成した後、即座に出力せず「自己評価」フェーズを実行し、回答の品質を向上。
-   　　検索結果との整合性やスタイルを自ら批評し、ハルシネーション（幻覚）や誤りを修正してからユーザーに回答します。
+      　　検索結果との整合性やスタイルを自ら批評し、ハルシネーション（幻覚）や誤りを修正してからユーザーに回答します。
 3. フルスクラッチ実装:
    　　Gemini APIを直接利用し、柔軟な制御を実現。
 
@@ -23,7 +24,7 @@
 - 第2部: Agent アーキテクチャ概念 (Theoretical Architecture)
 - 第3部: Agent 動作シーケンス (Runtime Behavior)
 
-![ld.png](assets/ld.png)
+![lp.png](assets/lp.png?t=1765400877187)
 
 ## 目次
 
