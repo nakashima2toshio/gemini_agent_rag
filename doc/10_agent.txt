@@ -1,0 +1,78 @@
+Advanced RAG System Design and Implemetation
+1. 概要 (Executive Summary)
+1.1 プロジェクトの目的
+本システムは、Gemini 3 (2.0 Flash) 世代に対応した統合型RAG（Retrieval-Augmented Generation）プラットフォームです。ドキュメントからの知識抽出、ベクトルデータベース管理、そして「自律型ReActエージェント」による高度な対話を一気通貫で提供します。
+1.2 主な機能
+• 自律型エージェント (ReAct + Reflection): Gemini 2.0 Flash を中核とし、検索ツールを自律的に利用。回答の自己推敲（Reflection）を行い、幻覚を低減します。
+• RAGパイプライン管理: ニュースやWiki等のドキュメントからQ/Aペアを自動生成し、知識ベースを構築します。
+• ハイブリッド検索: Qdrantを用いたDense（意味）+ Sparse（キーワード）検索により高精度な情報の取得を実現します。
+
+--------------------------------------------------------------------------------
+2. クイックスタート：3ステップで環境を起動
+Step 1: 必須環境変数の設定
+プロジェクトルートに .env ファイルを作成し、以下のキーを設定してください。
+• Google_API_KEY: Gemini モデルの利用に必須です（※OpenAI APIキーは不要）。
+# .env file
+Google_API_KEY=your_google_api_key_here
+Step 2: 起動コマンド
+Streamlitアプリケーションを起動します。
+streamlit run agent_rag.py --server.port=8500
+Step 3: ブラウザで確認
+http://localhost:8500 にアクセスし、エージェント対話画面が表示されることを確認します。
+
+--------------------------------------------------------------------------------
+3. システムアーキテクチャ (System Architecture)
+3.1 3層アーキテクチャ構成
+システムは責務分離のため、以下の3層で構成されています。
+レイヤー
+主要コンポーネント
+役割
+1. UI層
+agent_rag.py, ui/pages/
+Streamlitによる画面描画、エージェント思考(Thought)の可視化。
+2. サービス・ツール層
+agent_tools.py, services/
+エージェントのツール実行、Q/A生成ロジック、ReActループ制御。
+3. インフラ層
+Qdrant, Redis, Gemini API
+データの永続化、非同期処理、LLM推論の実行。
+3.2 RAGデータ生成パイプライン
+知識ベース構築のフローは以下の通りです。
+1. データ取得: ニュース記事やWikipedia等のソースを取得。
+2. Q/A生成: LLM (Gemini) を使用して、ドキュメントからQ/Aペアを生成します。
+3. Embedding & 格納:
+    ◦ モデル: gemini-embedding-001 (デフォルト)
+    ◦ 生成されたテキストをベクトル化し、Qdrantへ登録します。
+
+--------------------------------------------------------------------------------
+4. エージェント機能詳細 (Agent Runtime)
+4.1 ReAct + Reflection ループ
+Gemini 2.0 Flash は以下のサイクルを回して回答を生成します。
+1. Thought (思考): ユーザーの質問に対し、検索が必要か判断します。
+2. Action (行動): ツール search_rag_knowledge_base を呼び出し、gemini-embedding-001 でクエリをベクトル化して検索を実行します。
+3. Observation (観察): 検索結果を取得します。
+4. Reflection (推敲): 作成した回答案に対し、正確性とスタイルを自己評価し、修正してから最終回答を出力します。
+
+--------------------------------------------------------------------------------
+5. コア技術スタック (Core Technology Stack)
+本システムで採用されている主要技術は以下の通りです。
+カテゴリ
+技術要素
+備考
+LLM (Agent / Q/A生成)
+Gemini 2.0 Flash, Gemini 1.5 Pro
+高速推論・ReAct対応
+Embedding
+gemini-embedding-001
+デフォルト埋め込みモデル
+Vector DB
+Qdrant
+Dense + Sparse ハイブリッド検索
+Web UI
+Streamlit
+インタラクティブなチャットUI
+並列処理
+Celery + Redis
+大規模データのバックグラウンド処理
+言語
+Python 3.10+

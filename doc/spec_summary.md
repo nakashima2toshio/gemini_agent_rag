@@ -93,7 +93,7 @@ gemini3_rag_agent/
 ├── agent_main.py       # エージェント実行エントリーポイント
 ├── agent_tools.py      # ツール定義
 ├── config.py           # 設定管理 (AgentConfig, PathConfig)
-├── rag_qa_pair_qdrant.py
+├── agent_rag.py
 ├── logs/               # ログ出力先
 ├── ui/
 ├── eval/               # 【Phase 3 追加】評価モジュール

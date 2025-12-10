@@ -1,6 +1,6 @@
 # Gemini3-RAG 統合ツール 操作マニュアル
 
-本ドキュメントでは、Gemini 3 (2.0 Flash) 世代に対応した RAG Q&A生成・Qdrant管理統合ツール（`rag_qa_pair_qdrant.py`）の操作方法を解説します。
+本ドキュメントでは、Gemini 3 (2.0 Flash) 世代に対応した RAG Q&A生成・Qdrant管理統合ツールagent_rag.pyの操作方法を解説します。
 
 **最終更新**: 2025-12-03 (Gemini 2.0 Flash / Embedding 001 対応版)
 

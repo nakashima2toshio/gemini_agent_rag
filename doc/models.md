@@ -16,7 +16,7 @@
 
 ## 使用箇所
 
-- `rag_qa_pair_qdrant.py`
+- `agent_rag.py`
 - `celery_tasks.py`
 - `a02_make_qa_para.py`
 - `helper_rag_qa.py`

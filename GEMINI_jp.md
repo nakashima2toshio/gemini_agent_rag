@@ -1,3 +1,58 @@
+コマンド:                                                                                                                            │
+ /about - バージョン情報を表示
+ /auth - 認証方法を変更
+ /bug - バグ報告を送信
+ /chat - 会話履歴を管理
+   list - 保存された会話チェックポイントを一覧表示
+   save - 現在の会話をチェックポイントとして保存。使用法: /chat save <タグ> 
+   resume - チェックポイントから会話を再開します。使用法: /chat resume <タグ>
+   delete - 会話チェックポイントを削除します。使用法: /chat delete <タグ>  
+   share - 現在の会話をマークダウンまたはjsonファイルに共有。使用法: /chat share <ファイル名>  
+ /clear - 画面と会話履歴をクリア
+ /compress - コンテキストを要約に置き換えて圧縮
+ /copy - 最後の結果またはコードスニペットをクリップボードにコピー
+ /docs - ブラウザでGemini CLIの完全なドキュメントを開く
+ /directory - ワークスペースディレクトリを管理 
+   add - ワークスペースにディレクトリを追加。複数パスはカンマ区切り
+   show - ワークスペース内の全ディレクトリを表示
+ /editor - 外部エディタの設定を指定
+ /extensions - 拡張機能を管理
+   list - アクティブな拡張機能を一覧表示 
+   update - 拡張機能を更新します。使用法: update <拡張機能名>--all  
+   explore - ブラウザで拡張機能ページを開きます  
+   restart - すべての拡張機能を再起動します
+ /help - gemini-cli のヘルプを表示  
+ /ide - IDE 統合を管理 
+ /init - プロジェクトを分析し、カスタマイズされた GEMINI.md ファイルを作成 
+ /mcp - 設定済みの Model Context Protocol (MCP) サーバーを管理  
+   list - 設定済みの MCP サーバーとツールを一覧表示 
+   desc - 設定済みMCPサーバーとツールを説明付きで一覧表示 
+   schema - 設定済みMCPサーバーとツールを説明とスキーマ付きで一覧表示 
+   auth - OAuth対応MCPサーバーで認証 
+   refresh - MCPサーバーを再起動 
+ /memory - メモリ操作コマンド
+   show - 現在のメモリ内容を表示  
+   add - メモリにコンテンツを追加  
+   refresh - ソースからメモリを更新  
+   list - 使用中の GEMINI.md ファイルのパス一覧を表示
+ /model - モデル設定ダイアログを開く  
+ /privacy - プライバシー通知を表示   
+ /quit - CLIを終了  
+ /resume - 自動保存された会話を閲覧・再開  
+ /stats - セッション統計を確認。使用法: /stats [sessionmodeltools] 
+   session - セッション固有の使用統計を表示  
+   model - モデル固有の使用統計を表示  
+   tools - ツール固有の使用統計を表示  
+ /theme - テーマを変更  
+ /tools - 利用可能なGemini CLIツールを一覧表示。使用法: /tools [desc]
+ /settings - Gemini CLI設定の表示と編集  
+ /vim - vimモードのオン/オフ切り替え  
+ /setup-github - GitHub Actionsの設定   
+ /terminal-setup - 複数行入力用ターミナルキーバインディングの設定（VS Code、Cursor、Windsurf）  
+ ! - シェルコマンド  
+[MCP] - モデルコンテキストプロトコルコマンド（外部サーバーから） 
+
+
 # Gemini3 Hybrid RAG Agent - プロジェクトコンテキスト
 
 ## 1. プロジェクト概要

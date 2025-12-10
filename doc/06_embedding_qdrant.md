@@ -167,7 +167,7 @@ graph TD
 
 ## 2. Qdrantの主要な設定・処理・関数
 
-`rag_qa_pair_qdrant.py` および関連モジュール（`services/qdrant_service.py`, `qdrant_client_wrapper.py`）に基づき、Qdrantに関する主要な設定、処理、関数を整理しました。
+`agent_rag.py` および関連モジュール（`services/qdrant_service.py`, `qdrant_client_wrapper.py`）に基づき、Qdrantに関する主要な設定、処理、関数を整理しました。
 
 ### 2.1. 設定 (Configuration)
 Qdrantへの接続およびコレクションの基本設定です。

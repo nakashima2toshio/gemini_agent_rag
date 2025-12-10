@@ -17,7 +17,7 @@ from typing import Dict, List, Any, Optional, Union, Tuple
 from qdrant_client import QdrantClient
 
 # 設定とツール
-from config import AgentConfig
+from config import AgentConfig, GeminiConfig
 from agent_tools import search_rag_knowledge_base, list_rag_collections, RAGToolError
 from services.qdrant_service import get_all_collections
 from services.log_service import log_unanswered_question
@@ -126,7 +126,7 @@ def get_available_collections_from_qdrant() -> List[str]:
         logger.error(f"Failed to fetch collections: {e}")
         return []
 
-def setup_agent(selected_collections: List[str]) -> ChatSession:
+def setup_agent(selected_collections: List[str], model_name: str) -> ChatSession:
     """Geminiエージェントのセットアップ"""
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
@@ -143,7 +143,7 @@ def setup_agent(selected_collections: List[str]) -> ChatSession:
     system_instruction = SYSTEM_INSTRUCTION_TEMPLATE.format(available_collections=collections_str)
     
     model = genai.GenerativeModel(
-        model_name=AgentConfig.MODEL_NAME,
+        model_name=model_name,
         tools=tools_list,
         system_instruction=system_instruction
     )
@@ -375,6 +375,14 @@ def show_agent_chat_page():
     with st.sidebar:
         st.header("⚙️ エージェント設定")
         
+        # モデル選択の追加
+        selected_model = st.selectbox(
+            "使用モデル (Model)",
+            options=GeminiConfig.AVAILABLE_MODELS,
+            index=GeminiConfig.AVAILABLE_MODELS.index(AgentConfig.MODEL_NAME) 
+                  if AgentConfig.MODEL_NAME in GeminiConfig.AVAILABLE_MODELS else 0
+        )
+        
         # コレクション一覧の取得
         all_collections = get_available_collections_from_qdrant()
         
@@ -396,14 +404,18 @@ def show_agent_chat_page():
             # current_collections もクリアして再初期化を強制
             if "current_collections" in st.session_state:
                 del st.session_state["current_collections"]
+            # current_model もクリア
+            if "current_model" in st.session_state:
+                del st.session_state["current_model"]
             st.rerun()
 
     # 2. セッション状態の初期化と更新チェック
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
     
-    # 前回のコレクション選択状態と比較
+    # 前回のコレクション選択状態・モデルと比較
     current_collections_key = "current_collections"
+    current_model_key = "current_model"
     should_reinitialize = False
     
     # selected_collections はリストなのでソートして比較
@@ -413,11 +425,19 @@ def show_agent_chat_page():
         should_reinitialize = True
         # 設定が変わったので履歴クリアするか確認（今回はしないが、メッセージ出すなどあり）
         st.toast("検索対象コレクションが変更されたため、エージェントを再設定します。")
+        
+    # モデルの変更チェック
+    if current_model_key not in st.session_state:
+        should_reinitialize = True
+    elif st.session_state[current_model_key] != selected_model:
+        should_reinitialize = True
+        st.toast(f"モデルが変更されました: {selected_model}")
 
     if should_reinitialize or "chat_session" not in st.session_state or st.session_state.chat_session is None:
         try:
-            st.session_state.chat_session = setup_agent(selected_collections)
+            st.session_state.chat_session = setup_agent(selected_collections, selected_model)
             st.session_state[current_collections_key] = selected_collections
+            st.session_state[current_model_key] = selected_model
             st.toast("エージェントの準備が完了しました。")
         except Exception as e:
             st.error(f"エージェントの初期化に失敗しました: {e}")

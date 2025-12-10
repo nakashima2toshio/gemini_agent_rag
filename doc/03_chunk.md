@@ -8,7 +8,7 @@
   - [1.1 チャンク分割の役割](#11-チャンク分割の役割)
   - [1.2 システム構成図](#12-システム構成図)
 - [2. 関連ファイル一覧](#2-関連ファイル一覧)
-  - [2.1 rag_qa_pair_qdrant.py](#21-rag_qa_pair_qdrantpy)
+  - [2.1 agent_rag.py](#21-rag_qa_pair_qdrantpy)
   - [2.2 a02_make_qa_para.py](#22-a02_make_qa_parapy)
   - [2.3 a03_rag_qa_coverage_improved.py](#23-a03_rag_qa_coverage_improvedpy)
 - [3. SemanticCoverageクラス詳細](#3-semanticcoverageクラス詳細)
@@ -47,7 +47,7 @@
 
 ```mermaid
 graph TD
-    UI["rag_qa_pair_qdrant.py<br>(Streamlit UI)"]
+    UI["agent_rag.py<br>(Streamlit UI)"]
     CLI["a02_make_qa_para.py<br>(CLI/Celery)"]
     COV["a03_rag_qa_coverage_improved.py"]
 
@@ -72,7 +72,7 @@ graph TD
 
 ## 2. 関連ファイル一覧
 
-### 2.1 rag_qa_pair_qdrant.py
+### 2.1 agent_rag.py
 
 Streamlit UIアプリケーションのエントリポイントです。
 
@@ -83,7 +83,7 @@ Streamlit UIアプリケーションのエントリポイントです。
 | 画面構成 | 説明/DL/Q&A生成/Qdrant登録/表示/検索 |
 
 ```
-rag_qa_pair_qdrant.py
+agent_rag.py
 ├── services/
 │   ├── dataset_service.py   # データ取得・前処理
 │   ├── qa_service.py        # Q&A生成（a02_make_qa_para.py連携）

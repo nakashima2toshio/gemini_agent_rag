@@ -9,7 +9,7 @@ RAGツールのStreamlitメインエントリポイント
     streamlit run ui/app.py
 
 または:
-    streamlit run rag_qa_pair_qdrant.py  # 従来の方法
+    streamlit run agent_rag.py  # 従来の方法
 """
 
 import streamlit as st

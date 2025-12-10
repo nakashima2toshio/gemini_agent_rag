@@ -1,6 +1,6 @@
 # インストール・環境構築ガイド
 
-本ドキュメントでは、RAG Q&A生成システムの環境構築から rag_qa_pair_qdrant.py の起動までの手順を解説します。
+本ドキュメントでは、RAG Q&A生成システムの環境構築から agent_rag.py の起動までの手順を解説します。
 
 ## 目次
 
@@ -33,7 +33,7 @@
   - [5.7 Celery動作確認](#57-celery動作確認)
 - [6. アプリケーション起動](#6-アプリケーション起動)
   - [6.1 ディレクトリ準備](#61-ディレクトリ準備)
-  - [6.2 rag_qa_pair_qdrant.py の起動](#62-rag_qa_pair_qdrantpy-の起動)
+  - [6.2 agent_rag.py の起動](#62-rag_qa_pair_qdrantpy-の起動)
   - [6.3 ブラウザでのアクセス確認](#63-ブラウザでのアクセス確認)
 - [7. 起動チェックリスト](#7-起動チェックリスト)
   - [7.1 全サービス確認コマンド](#71-全サービス確認コマンド)
@@ -67,7 +67,7 @@
 
 ```mermaid
 graph TD
-    User((ユーザー<br>ブラウザ)) -->|http://localhost:8500| Streamlit[Streamlit アプリケーション<br>rag_qa_pair_qdrant.py<br>Port: 8500]
+    User((ユーザー<br>ブラウザ)) -->|http://localhost:8500| Streamlit[Streamlit アプリケーション<br>agent_rag.py<br>Port: 8500]
     
     Streamlit -->|Q&A生成/Embedding| Gemini(Gemini API<br>クラウド)
     Streamlit -->|ベクトル検索| Qdrant[(Qdrant<br>Port: 6333<br>Docker)]
@@ -518,11 +518,11 @@ mkdir -p datasets OUTPUT qa_output logs
 | qa_output/ | 生成されたQ&Aペア |
 | logs/ | Celeryログファイル |
 
-### 6.2 rag_qa_pair_qdrant.py の起動
+### 6.2 agent_rag.py の起動
 
 ```bash
 # 仮想環境が有効化されていることを確認
-(venv) $ streamlit run rag_qa_pair_qdrant.py --server.port=8500
+(venv) $ streamlit run agent_rag.py --server.port=8500
 ```
 
 **起動メッセージ:**
@@ -598,7 +598,7 @@ redis-cli FLUSHDB
 ./start_celery.sh start -w 24
 
 echo "4. Streamlit起動..."
-streamlit run rag_qa_pair_qdrant.py --server.port=8500
+streamlit run agent_rag.py --server.port=8500
 ```
 
 ---
@@ -731,7 +731,7 @@ sleep 5
 ./start_celery.sh start -w 24
 
 # 4. アプリケーション起動
-streamlit run rag_qa_pair_qdrant.py --server.port=8500
+streamlit run agent_rag.py --server.port=8500
 ```
 
 ---
@@ -791,7 +791,7 @@ celery -A celery_config flower --port=5555
 
 ```bash
 # 統合アプリ起動
-streamlit run rag_qa_pair_qdrant.py --server.port=8500
+streamlit run agent_rag.py --server.port=8500
 
 # CLI版Q&A生成
 python a02_make_qa_para.py --dataset cc_news --use-celery --celery-workers 24
@@ -822,7 +822,7 @@ python a02_make_qa_para.py --dataset cc_news --use-celery --celery-workers 24
 gemini_rag_qa/
 ├── .env                      # 環境変数(作成必要)
 ├── requirements.txt          # Python依存パッケージ
-├── rag_qa_pair_qdrant.py     # 統合アプリ
+├── agent_rag.py     # 統合アプリ
 ├── celery_config.py          # Celery設定
 ├── celery_tasks.py           # Celeryタスク定義
 ├── start_celery.sh           # Celery起動スクリプト

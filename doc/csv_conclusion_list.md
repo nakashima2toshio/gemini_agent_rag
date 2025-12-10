@@ -9,7 +9,7 @@ doc/04_prompt.md
 doc/05_qa_pair.md
 oc/06_embedding_qdrant.md
 oc/07_qdrant_integration_add.md
-doc/08_rag_qa_pair_qdrant.md
+doc/08_agent_rag.md
 
 ・ソース
 a01_load_non_qa_rag_data.py
@@ -23,7 +23,7 @@ a50_rag_search_local_qdrant.py
 
 メイン：
 qdrant_client_wrapper.py
-rag_qa_pair_qdrant.py
+agent_rag.py
 
 ・ヘルパー
 helper_api.py

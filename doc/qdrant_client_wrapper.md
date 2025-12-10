@@ -15,7 +15,7 @@ Qdrantベクトルデータベースとの操作を一元管理するラッパ�
 
 ## 使用箇所
 
-- `rag_qa_pair_qdrant.py`
+- `agent_rag.py`
 - `a42_qdrant_registration.py`
 - `a50_rag_search_local_qdrant.py`
 

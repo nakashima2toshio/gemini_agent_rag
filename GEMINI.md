@@ -33,7 +33,7 @@ This project implements a **Hybrid RAG (Retrieval-Augmented Generation) Agent** 
 | File/Directory | Description |
 | :--- | :--- |
 | **`agent_main.py`** | **Entry Point (CLI):** The main interactive loop for the ReAct agent. |
-| **`rag_qa_pair_qdrant.py`** | **Entry Point (GUI):** Streamlit app for managing data, generation, and search. |
+| `agent_rag.py` | **Entry Point (GUI):** Streamlit app for managing data, generation, and search. |
 | `agent_tools.py` | Defines the tools (functions) available to the agent (e.g., `search_rag_knowledge_base`). |
 | `celery_tasks.py` | Definitions for asynchronous Celery tasks (Q/A generation). |
 | `helper_rag.py` | Core RAG logic, including chunking and text processing. |
