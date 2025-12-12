@@ -63,7 +63,6 @@ flowchart TB
         A4["Qdrant登録"]
         A5["Show Qdrant"]
         A6["Qdrant検索"]
-    end
 
     subgraph PIPELINE["処理パイプライン"]
         P1["データセット<br/>cc_news / livedoor / wikipedia"]
