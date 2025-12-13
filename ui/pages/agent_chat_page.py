@@ -313,10 +313,57 @@ def show_agent_chat_page():
     st.caption("Gemini 2.0 Flash + ReAct + Qdrant Hybrid RAG (Dense + Sparse)")
 
     # -------------------------------------------------------------------------
+    # 元ドキュメント表示エリア (Added)
+    # -------------------------------------------------------------------------
+    with st.expander("📄 元ドキュメントの表示", expanded=False):
+        st.markdown("ダウンロードしたドキュメントの選択：")
+        
+        output_dir = "OUTPUT"
+        target_patterns = {
+            "cc_news": "cc_news*.txt",
+            "japanese_text": "japanese_text*.txt",
+            "livedoor": "livedoor*.txt",
+            "wikipedia_ja": "wikipedia_ja*.txt"
+        }
+        
+        file_options = {}
+        if os.path.exists(output_dir):
+            import glob
+            for label, pattern in target_patterns.items():
+                files = glob.glob(os.path.join(output_dir, pattern))
+                if files:
+                    # 更新日時順にソートして最新を取得
+                    latest_file = max(files, key=os.path.getctime)
+                    file_options[label] = latest_file
+        
+        if file_options:
+            selected_doc_label = st.selectbox(
+                "ドキュメントを選択:", 
+                options=list(file_options.keys()),
+                key="original_doc_selector"
+            )
+            
+            if selected_doc_label:
+                file_path = file_options[selected_doc_label]
+                st.caption(f"参照ファイル: {file_path}")
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        lines = []
+                        for _ in range(100):
+                            line = f.readline()
+                            if not line: break
+                            lines.append(line)
+                        st.text_area("ファイル内容 (先頭100行):", value="".join(lines), height=300)
+                except Exception as e:
+                    st.error(f"読み込みエラー: {e}")
+        else:
+            st.info("OUTPUTディレクトリにテキストファイルが見つかりません。")
+
+    # -------------------------------------------------------------------------
     # 入力クエリの参考用 Q&A表示エリア (Added)
     # -------------------------------------------------------------------------
-    with st.expander("📚 登録済みQ&Aの参照 (入力クエリのヒント)", expanded=False):
-        st.markdown("登録されているコレクションから、質問と回答のサンプルを表示します。質問の参考にしてください。")
+    with st.expander("📚 登録済みQ&Aの参照 (生成AI：Geminiが元ドキュメントの意味を解析しドキュメント内の重要箇所に基づいて「質問」と「回答」のペアを自動抽出しRAGシステムで利用可能なCSV形式のナレッジデータとして生成）入力クエリのヒント", expanded=False):
+        st.markdown("登録されているコレクションから、質問と回答のサンプルを100件表示します。質問の参考にしてください。")
         
         # プレビュー用のコレクション取得
         preview_collections = get_available_collections_from_qdrant()
@@ -336,10 +383,10 @@ def show_agent_chat_page():
                     # Qdrantクライアント接続
                     client = QdrantClient(url=os.getenv("QDRANT_URL", "http://localhost:6333"))
                     
-                    # 上位12件を取得
+                    # 上位100件を取得
                     points, _ = client.scroll(
                         collection_name=target_collection,
-                        limit=12,
+                        limit=100,
                         with_payload=True,
                         with_vectors=False
                     )

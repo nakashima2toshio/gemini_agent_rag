@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-RAG Q&A生成・Qdrant管理 Streamlit アプリケーション
-
+streamlit run agent_rag.py  --server.port 8501
+実行コマンド：
+Agent RAG Q&A生成・Qdrant管理 Streamlit アプリケーション
 詳細な仕様、実行方法、アーキテクチャについては、プロジェクトルートの `README.md` を参照してください。
 """
 
