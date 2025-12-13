@@ -3,24 +3,31 @@
 ---
 
 ## 1. エグゼクティブサマリー
-本システムは、「自律型 RAG エージェント」および統合管理プラットフォームです。
+「自律型 RAG エージェント」、統合管理プラットフォームを公開しました。
+
 フルスクラッチで書かれておりGithubで全ソースを公開中。
-システムの特徴：（ReAct + Reflection） + Qdrantの高速ベクトル検索
-ReAct：自律的に検索
+エージェント自らが「考える（Reasoning）」と「行動する（Acting）」をCoTでループ
+　（ReAct + Reflection） + Qdrantの高速ベクトル検索
+[ReAct]：自律的に検索
 ・プロンプト最適化
 　・CoTのループ
 　・Hybrid RAG (Dense + Sparse)の検索
 ・フルスクラッチ実装
 ・Gemini 3世代対応）です。
-Reflection：
+[]Reflection]：
 ・自己評価結果に基づき、最終回答 (Final Answer) を抽出：自己省察
 ・回答を作成した後、即座に出力せず「自己評価」フェーズを実行し、回答の品質を向上。
 ・検索結果との整合性やスタイルを自ら批評し、ハルシネーション（幻覚）や誤りを修正しユーザーに回答します。
 StreamlitベースのUIを通じて、データの取得・ベクトル化から、Qdrant データベース管理、
 そして高度なエージェント対話まで、RAG パイプライン全体を一気通貫で管理・運用することができます。
 
+GitHub:
+https://github.com/nakashima2toshio/gemini_agent_rag
+
+
+
 ReAct: 自律的に検索
-エージェント自らが「考える（Reasoning）」と「行動する（Acting）」をループ
+エージェント自らが「考える（Reasoning）」と「行動する（Acting）」をCoTでループ
 Router & Multi-turn 戦略で（Thought） → （Action） → （Observation） のループが明確
 
 

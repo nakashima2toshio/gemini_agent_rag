@@ -2,7 +2,7 @@
 
 ## Gemini搭載・自立型RAGエージェントシステム
 
-![agent_1.png](doc/assets/agent_1.png)
+![agent_lp](doc/assets/agent_1.png)
 
 # Agent RAG システム
 
@@ -563,9 +563,9 @@ Reflectionは、生成された回答（ドラフト）に対して客観的な�
 ```mermaid
 flowchart LR
     R_Input([Draft Answer]) --> R_Reflect
-    subgraph Reflection_Loop [Reflectionループ: 推敲パート]
-        R_Reflect[Reflect: 批評・チェック] --> R_Check{"問題なし?"}
-        R_Check -- No --> R_Revise[Revise: 修正版作成]
+    subgraph Reflection_Loop ["Reflectionループ: 推敲パート"]
+        R_Reflect["Reflect: 批評・チェック"] --> R_Check("問題なし?")
+        R_Check -- No --> R_Revise["Revise: 修正版作成"]
         R_Revise --> R_Reflect
     end
     R_Check -- Yes --> R_Output([Final Answer])
@@ -581,14 +581,14 @@ flowchart LR
 ```mermaid
 flowchart TD
     User([ユーザーの依頼]) --> Reasoning
-    subgraph Phase1 [Phase 1: ReAct Loop]
+    subgraph Phase1 ["Phase 1: ReAct Loop"]
         direction TB
-        Reasoning[思考と行動の繰り返し] --> Draft[ドラフト回答の作成]
+        Reasoning["思考と行動の繰り返し"] --> Draft["ドラフト回答の作成"]
     end
 
-    subgraph Phase2 [Phase 2: Reflection Loop]
+    subgraph Phase2 ["Phase 2: Reflection Loop"]
         direction TB
-        Critique[ドラフトと依頼を比較・批評] --> Revise[修正と洗練]
+        Critique["ドラフトと依頼を比較・批評"] --> Revise["修正と洗練"]
     end
 
     Draft --> Critique
