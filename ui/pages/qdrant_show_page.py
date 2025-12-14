@@ -163,7 +163,7 @@ def show_qdrant_page():
                     c3.error(status)
                 
                 # 削除ボタン
-                if c4.button("🗑️ 削除", key=f"del_btn_{name}", type="secondary"):
+                if c4.button("🗑️ 削除", key=f"del_btn_{name}", type="secondary", disabled=True):
                     st.session_state[f"confirm_delete_{name}"] = True
                 
                 # 削除確認
@@ -205,7 +205,7 @@ def show_qdrant_page():
             
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("📦 データソース分析を表示", width='stretch'):
+                if st.button("📦 データソース分析を表示", width='stretch', disabled=True):
                     with st.spinner("分析中..."):
                         source_info = data_fetcher.fetch_collection_source_info(selected_collection)
                         display_source_info(source_info)
@@ -215,7 +215,7 @@ def show_qdrant_page():
             
             st.divider()
             
-            if st.button("🔎 データをロード", type="primary", width='stretch'):
+            if st.button("🔎 データをロード", type="primary", width='stretch', disabled=True):
                 with st.spinner("ロード中..."):
                     df_points = data_fetcher.fetch_collection_points(selected_collection, limit=limit)
                     
@@ -268,7 +268,7 @@ def show_qdrant_page():
             
             recreate = st.checkbox("既存コレクションがあれば上書きする", value=True, key="merge_recreate")
             
-            if st.button("🚀 統合を実行", type="primary", disabled=len(selected_to_merge) < 2):
+            if st.button("🚀 統合を実行", type="primary", disabled=True): # len(selected_to_merge) < 2
                 
                 progress_bar = st.progress(0)
                 status_text = st.empty()

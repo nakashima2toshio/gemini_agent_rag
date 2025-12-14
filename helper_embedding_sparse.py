@@ -71,17 +71,53 @@ class SparseEmbeddingClient:
     def embed_texts(
         self,
         texts: List[str],
-        batch_size: int = 32
+        batch_size: int = 32,
+        progress_callback: Any = None
     ) -> List[Dict[str, List[Any]]]:
         """
         バッチSparse Embedding生成
         
+        Args:
+            texts: テキストリスト
+            batch_size: バッチサイズ
+            progress_callback: 進捗コールバック関数 (current, total) -> None
+        
         Returns:
             [{"indices": [...], "values": [...]}, ...] のリスト
         """
+        try:
+            from tqdm import tqdm
+            use_tqdm = True
+        except ImportError:
+            use_tqdm = False
+
         results = []
-        for vec in self._model.embed(texts, batch_size=batch_size):
-            results.append(self._format_output(vec))
+        total = len(texts)
+        
+        # progress_callbackが指定されている場合はそちらを優先
+        if progress_callback:
+            logger.info(f"Starting sparse embedding generation with callback (total={total}, batch_size={batch_size})")
+            # ジェネレータではなく手動で回してコールバックを呼び出す
+            for i in range(0, total, batch_size):
+                batch_texts = texts[i : i + batch_size]
+                # FastEmbedのembedメソッドはジェネレータを返すが、ここではリスト化して処理
+                batch_results = list(self._model.embed(batch_texts, batch_size=batch_size))
+                for vec in batch_results:
+                    results.append(self._format_output(vec))
+                
+                # 進捗更新
+                current = min(i + batch_size, total)
+                progress_callback(current, total)
+                
+        else:
+            # 従来通りtqdmを使用
+            generator = self._model.embed(texts, batch_size=batch_size)
+            if use_tqdm:
+                generator = tqdm(generator, total=total, desc="Sparse Embedding", unit="docs")
+                
+            for vec in generator:
+                results.append(self._format_output(vec))
+                
         return results
 
     def _format_output(self, sparse_vec) -> Dict[str, List[Any]]:

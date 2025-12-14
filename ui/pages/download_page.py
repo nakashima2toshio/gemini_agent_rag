@@ -181,7 +181,7 @@ def show_rag_download_page():
 
     # 実行ボタン
     run_download = st.button(
-        "🚀 ダウンロード＆前処理開始", type="primary", width='stretch'
+        "🚀 ダウンロード＆前処理開始", type="primary", width='stretch', disabled=True
     )
 
     st.divider()

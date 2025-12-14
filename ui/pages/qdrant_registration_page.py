@@ -163,7 +163,7 @@ def show_qdrant_registration_page():
         "🚀 Qdrantに登録を実行",
         type="primary",
         width='stretch',
-        disabled=not (qdrant_connected and is_valid_collection_name),
+        disabled=True, # not (qdrant_connected and is_valid_collection_name),
     )
 
     # ログ表示エリア
@@ -220,7 +220,22 @@ def show_qdrant_registration_page():
             if use_hybrid_search:
                 with st.spinner("🔠 Sparse埋め込み生成中 (FastEmbed)..."):
                     add_log("🔠 Sparse埋め込み生成開始 (FastEmbed)")
-                    sparse_vectors = embed_sparse_texts_unified(texts)
+                    
+                    # プログレスバーの作成
+                    progress_bar = st.progress(0, text="Sparse Embedding 生成中...")
+                    
+                    def update_progress(current, total):
+                        percent = int((current / total) * 100)
+                        progress_bar.progress(percent, text=f"Sparse Embedding 生成中... ({current}/{total})")
+                    
+                    try:
+                        sparse_vectors = embed_sparse_texts_unified(
+                            texts, 
+                            progress_callback=update_progress
+                        )
+                    finally:
+                        progress_bar.empty()
+                        
                     add_log(f"✅ {len(sparse_vectors)} 件のSparse埋め込みを生成しました")
 
             # ステップ4: ポイント構築

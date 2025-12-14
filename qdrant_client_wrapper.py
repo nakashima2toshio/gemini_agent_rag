@@ -606,7 +606,8 @@ def embed_query_unified(
 def embed_sparse_texts_unified(
     texts: List[str],
     model_name: str = None,
-    batch_size: int = 32
+    batch_size: int = 4,
+    progress_callback: Any = None
 ) -> List[models.SparseVector]:
     """
     テキストをSparse Embedding (キーワードベクトル) に変換
@@ -615,6 +616,7 @@ def embed_sparse_texts_unified(
         texts: テキストリスト
         model_name: 使用するSparseモデル（Noneの場合はデフォルト）
         batch_size: バッチサイズ
+        progress_callback: 進捗コールバック関数 (current, total) -> None
 
     Returns:
         Qdrant用SparseVectorオブジェクトのリスト
@@ -633,7 +635,11 @@ def embed_sparse_texts_unified(
         return [models.SparseVector(indices=[], values=[])] * len(texts)
 
     # Sparse Embedding生成
-    raw_sparse_vecs = sparse_client.embed_texts(valid_texts, batch_size=batch_size)
+    raw_sparse_vecs = sparse_client.embed_texts(
+        valid_texts, 
+        batch_size=batch_size,
+        progress_callback=progress_callback
+    )
 
     # Qdrantモデルに変換して元の順序に戻す
     sparse_vecs: List[models.SparseVector] = []

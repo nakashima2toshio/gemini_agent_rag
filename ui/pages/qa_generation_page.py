@@ -223,7 +223,7 @@ def show_qa_generation_page():
         "🚀 Q/A生成開始" if not st.session_state["qa_generation_running"] else "⏳ 処理中...",
         type="primary",
         width='stretch',
-        disabled=st.session_state["qa_generation_running"]
+        disabled=True # st.session_state["qa_generation_running"]
     )
 
     st.divider()
