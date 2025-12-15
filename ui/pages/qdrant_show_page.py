@@ -75,6 +75,23 @@ def show_qdrant_page():
     st.title("🗄️ Qdrantデータ管理")
     st.caption("Qdrantコレクションの閲覧、削除、および統合管理")
 
+    # API費用節約のための説明メッセージ（ピンク背景）
+    pink_message_html = """
+    <div style="background-color:#FFC0CB; padding:10px; border-radius:5px; border:1px solid #FF69B4;">
+        <p style="color:#8B0000; font-weight:bold; margin-bottom:0px;">
+            すでに、HuggingFaceから下記のファイルをダウンロードして配置、<br>
+            Q/Aペアを作成済み、Qdrantにembeddingベクトルデータを登録済みです。<br>
+            ・Wikipedia日本語版<br>
+            ・日本語Webテキスト（CC100）<br>
+            ・CC-News（英語ニュース）<br>
+            ・Livedoorニュースコーパス<br>
+            よって、ここの送信ボタンはdisableにしてあります。（API費用がかかり過ぎるので😹）
+        </p>
+    </div>
+    """
+    st.markdown(pink_message_html, unsafe_allow_html=True)
+    st.write("") # 1行空ける
+
     # セッションステート初期化
     if "qdrant_debug_mode" not in st.session_state:
         st.session_state.qdrant_debug_mode = False
