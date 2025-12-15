@@ -246,7 +246,7 @@ def run_agent_turn(chat_session: ChatSession, user_input: str) -> str:
         with st.spinner("回答を推敲中 (Reflection)..."):
             try:
                 # 思考ログへの区切り線
-                thought_log.append("---")
+
                 thought_log.append("🔄 **Reflection Phase (推敲)**")
 
                 # Reflectionプロンプトの送信
@@ -288,9 +288,10 @@ def run_agent_turn(chat_session: ChatSession, user_input: str) -> str:
     # 思考プロセスをexpanderで表示
     if thought_log:
         with st.expander("🤔 エージェントの思考プロセス (Click to open)", expanded=False):
-            for log in thought_log:
+            for i, log in enumerate(thought_log):
                 st.markdown(log)
-                st.divider()
+                if i < len(thought_log) - 1:
+                    st.divider()
 
     # 最終回答の整形: Answer: タグがあればそこを抽出、なければ Thought: を除去
     if "Answer:" in final_response_text:
