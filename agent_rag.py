@@ -1,10 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+
 streamlit run agent_rag.py  --server.port 8501
 実行コマンド：
 Agent RAG Q&A生成・Qdrant管理 Streamlit アプリケーション
 詳細な仕様、実行方法、アーキテクチャについては、プロジェクトルートの `README.md` を参照してください。
+[リモート]：
+# 設定ファイルの変更を反映
+sudo systemctl daemon-reload
+
+# サーバー起動時に自動で立ち上がるように設定
+sudo systemctl enable streamlit-app
+
+# 今すぐ起動する
+sudo systemctl start streamlit-app
+
+# 動いているか？
+sudo systemctl status streamlit-app
 """
 
 import streamlit as st
