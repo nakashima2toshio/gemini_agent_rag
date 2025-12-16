@@ -7,6 +7,7 @@ streamlit run agent_rag.py  --server.port 8501
 Agent RAG Q&A生成・Qdrant管理 Streamlit アプリケーション
 詳細な仕様、実行方法、アーキテクチャについては、プロジェクトルートの `README.md` を参照してください。
 [リモート]：
+ssh -i ~/.ssh/gcp_key_v2 nakashima@34.84.198.115
 # 設定ファイルの変更を反映
 sudo systemctl daemon-reload
 
@@ -15,6 +16,8 @@ sudo systemctl enable streamlit-app
 
 # 今すぐ起動する
 sudo systemctl start streamlit-app
+# とめる
+sudo systemctl stoop streamlit-app
 
 # 動いているか？
 sudo systemctl status streamlit-app
