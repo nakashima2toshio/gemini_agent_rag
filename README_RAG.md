@@ -179,7 +179,7 @@ streamlit run agent_rag.py
 | 5 | **Show-Qdrant** | コレクション表示 | データ確認、統計情報              |
 | 6 | **Qdrant検索**  | 類似度検索       | 質問入力→検索→AI応答            |
 
-![RAG_dl.png](assets/RAG_dl.png?t=1764367055620)
+![RAG_dl.png](doc/assets/RAG_dl.png?t=1764367055620)
 
 ### 3.2 画面フロー
 
@@ -193,7 +193,7 @@ flowchart LR
 
 ### 3.3 各画面の概要
 
-![RAG_dl.png](assets/RAG_dl.png?t=1764367120205)
+![RAG_dl.png](doc/assets/RAG_dl.png?t=1764367120205)
 
 #### 画面1: 説明（About）
 

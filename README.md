@@ -118,7 +118,7 @@ StreamlitベースのUIを通じて、データの取得・ベクトル化から
 **アプリケーション・全機能** ![integration](doc/assets/rag_integration_app.png)
 
 - 画面：
-  ![lp.png](assets/lp.png?t=1765400877187)
+  ![lp.png](doc/assets/lp.png?t=1765400877187)
 
 ### 1.3 対応データセット
 
