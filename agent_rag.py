@@ -61,6 +61,7 @@ def main():
             }[x],
             label_visibility="collapsed",
         )
+        st.markdown("全ソースは： [GitHub: nakashima2toshio/gemini_agent_rag](https://github.com/nakashima2toshio/gemini_agent_rag)")
         st.divider() # Removed one of the two consecutive dividers
 
 

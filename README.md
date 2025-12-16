@@ -12,7 +12,7 @@ StreamlitベースのUIを通じて、データの取得・ベクトル化から
 そして高度なエージェント対話まで、RAG パイプライン全体を一気通貫で管理・運用することができます。
 
 **主な特徴と技術的工夫:**
-
+```text
 1. ReAct (Reasoning + Acting):
    　　エージェント自らが「考える（Reasoning）」と「行動する（Acting）」をループ
    　　・入力プロンプトの最適化
@@ -24,6 +24,7 @@ StreamlitベースのUIを通じて、データの取得・ベクトル化から
    　　検索結果との整合性やスタイルを自ら批評し、ハルシネーション（幻覚）や誤りを修正してからユーザーに回答します。
 3. フルスクラッチ実装:
    　　Gemini APIを直接利用し、柔軟な制御を実現しました。
+```
 
 ![agent_overall](doc/assets/agent_4_react_reflection.png)
 
@@ -115,10 +116,11 @@ StreamlitベースのUIを通じて、データの取得・ベクトル化から
 | Qdrantデータ管理 | 🗄️     | Qdrantコレクション内容の閲覧 (Show-Qdrant)                                                                 |
 | Qdrant検索       | 🔎       | セマンティック検索単体のテスト・AI応答生成                                                                 |
 
-**アプリケーション・全機能** ![integration](doc/assets/rag_integration_app.png)
+**アプリケーション・全機能**
+![integration](doc/assets/rag_integration_app.png)
 
 - 画面：
-  ![lp.png](doc/assets/lp.png?t=1765400877187)
+![lp.png](doc/assets/lp.png)
 
 ### 1.3 対応データセット
 
