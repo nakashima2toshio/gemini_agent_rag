@@ -17,7 +17,7 @@ sudo systemctl enable streamlit-app
 # 今すぐ起動する
 sudo systemctl start streamlit-app
 # とめる
-sudo systemctl stoop streamlit-app
+sudo systemctl stop streamlit-app
 
 # 動いているか？
 sudo systemctl status streamlit-app

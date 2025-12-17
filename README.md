@@ -48,10 +48,10 @@ StreamlitベースのUIを通じて、データの取得・ベクトル化から
    - 3.3 [ディレクトリ構造](#33-ディレクトリ構造)
 4. [サービス層 & ツール層](#4-サービス層--ツール層)
    - 4.1 [dataset_service.py - データセット操作](#41-dataset_servicepy---データセット操作)
-   - 4.2 [qdrant_service.py - Qdrant操作](#42-qdrant_servicepy---qdrant操作)
-   - 4.3 [file_service.py - ファイル操作](#43-file_servicepy---ファイル操作)
-   - 4.4 [qa_service.py - Q/A生成](#44-qa_servicepy---qa生成)
-   - 4.5 [agent_tools.py - エージェント用ツール](#45-agent_toolspy---エージェント用ツール)
+   - 4.3 qdrant_service.py - Qdrant操作](#42-qdrant_servicepy---qdrant操作)
+   - 4.4 file_service.py - ファイル操作](#43-file_servicepy---ファイル操作)
+   - 4.5 qa_service.py - Q/A生成](#44-qa_servicepy---qa生成)
+   - 4.6 agent_tools.py - エージェント用ツール](#45-agent_toolspy---エージェント用ツール)
 5. [UI層 (ui/pages/)](#5-ui層-uipages)
    - 5.1 [画面一覧と遷移](#51-画面一覧と遷移)
    - 5.2 [各ページの機能詳細](#52-各ページの機能詳細)
@@ -175,6 +175,7 @@ graph LR
     end
 
     subgraph Logic_Layer ["Logic"]
+        AgentSvc["services/agent_service.py"]
         Tools["agent_tools.py"]
         QS["qdrant_service.py"]
         LogSvc["services/log_service.py"]
@@ -190,9 +191,10 @@ graph LR
     InitUI --> LogPage
     InitUI --> OtherPages
 
-    AgentPage --> Tools
+    AgentPage --> AgentSvc
+    AgentSvc --> Tools
+    AgentSvc --> LogSvc
     AgentPage --> QS
-    AgentPage --> LogSvc
     Tools --> QdrantWrapper
 
     OtherPages --> QS
@@ -204,7 +206,8 @@ graph LR
 | レイヤー             | モジュール                    | 責務                                                         |
 | -------------------- | ----------------------------- | ------------------------------------------------------------ |
 | **エントリポイント** | `agent_rag.py`                | アプリ起動、ルーティング                                     |
-| **UI層**             | `ui/pages/agent_chat_page.py` | エージェント対話UI、ReActループ制御 (`run_agent_turn`)       |
+| **UI層**             | `ui/pages/agent_chat_page.py` | エージェント対話UI、ユーザー入力受付、思考ログの表示         |
+| **サービス層**       | `services/agent_service.py`   | **エージェント制御コア**。ReActループ、Reflection、履歴管理  |
 | **ツール層**         | `agent_tools.py`              | エージェントが利用するツール群 (`search_rag_knowledge_base`) |
 | **サービス層**       | `services/*.py`               | データ処理、DB操作の抽象化                                   |
 
@@ -258,9 +261,33 @@ graph TB
 
 ## 4. サービス層 & ツール層
 
-### 4.5 agent_tools.py - エージェント用ツール
+### 4.1 agent_service.py - エージェント制御 (ReAct Engine)
 
-**責務**: エージェントが外部環境（Qdrant）と対話するためのインターフェースを提供。
+**責務**: エージェントの思考プロセス (ReAct + Reflection) をカプセル化したコアサービス。
+
+*   **クラス `ReActAgent`**:
+    *   **セッション管理**: Gemini API とのチャットセッションを維持。
+    *   **ReActループ**: 思考(Thought)と行動(Action)のサイクルを回し、ツール実行を制御。
+    *   **Reflection**: 回答案生成後の自己評価・修正フェーズを実行。
+    *   **イベント駆動**: 思考ログやツール実行結果をジェネレータとしてUIに逐次返却。
+
+### 4.2 dataset_service.py - データセット操作
+
+**責務**: データセットのロード、前処理、保存。
+
+### 4.3 qdrant_service.py - Qdrant操作
+
+**責務**: Qdrantクライアントの操作を抽象化し、コレクション管理・検索機能を提供。
+
+### 4.4 file_service.py - ファイル操作
+
+**責務**: アップロードされたファイルやローカルファイルの読み込み・保存・削除。
+
+### 4.5 qa_service.py - Q/A生成
+
+**責務**: テキストチャンクからQ/Aペアを生成するビジネスロジック (同期/非同期)。
+
+### 4.6 agent_tools.py - エージェント用ツール
 
 
 | 関数名                      | 説明                                                                           | 関連ツール名（LLM側）       |
@@ -345,17 +372,17 @@ Geminiの Function Calling 機能を利用し、以下のサイクルを回し�
 
 ### 9.2 主要クラス・関数 IPO 定義
 
-#### `ui.pages.agent_chat_page.run_agent_turn`
+#### `services.agent_service.ReActAgent.execute_turn`
 
 ![query_fig](doc/assets/agent_6_query.png)
-エージェントの1ターン（ユーザー発話〜最終回答）を制御するメイン関数。
+エージェントの1ターン（ユーザー発話〜最終回答）を制御するメインメソッド。ジェネレータとして実装されています。
 
 
-| 項目        | 内容                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Input**   | `chat_session`: Gemini ChatSession<br>`user_input`: ユーザーの質問文字列                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| **Process** | 1.`chat_session.send_message(user_input)` を送信。<br>2. 応答に `function_call` が含まれるか確認。<br>3. **含まれる場合**:<br>　a. 思考プロセスを表示・ログ記録。<br>　b. `agent_tools` 内の対応関数を実行。<br>　c. 結果を `function_response` として Gemini に返送。<br>　d. ステップ2に戻る（ReActループ）。<br>4. **含まれない場合**:<br>　a. 現在の回答をドラフト (Draft Answer) とする。<br>5. **Reflection (推敲)**:<br>　a. ドラフト回答を `REFLECTION_INSTRUCTION` と共に送信。<br>　b. 自己評価結果に基づき、最終回答 (Final Answer) を抽出。 |
-| **Output**  | `final_response_text`: 最終的な回答文字列                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 項目        | 内容                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Input**   | `user_input`: ユーザーの質問文字列                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Process** | 1.`chat_session.send_message(user_input)` を送信。<br>2. **ReAct Loop**:<br>　a. 応答に `function_call` が含まれる場合、`tool_call` イベントをYield。<br>　b. ツール実行結果を `tool_result` イベントとしてYieldし、LLMに返送。<br>　c. 思考プロセスがあれば `log` イベントとしてYield。<br>　d. function_callがなくなるまでループ。<br>3. **Reflection Phase**:<br>　a. ドラフト回答を作成。<br>　b. `REFLECTION_INSTRUCTION` と共に自己評価を要求。<br>　c. 評価思考を `log` イベントとしてYield。<br>　d. 修正後の最終回答を抽出。<br>4. 最終回答を `final_answer` イベントとしてYield。 |
+| **Output**  | `Generator[Dict[str, Any]]`: イベントストリーム<br>(例: `{'type': 'log', 'content': '...'}`, `{'type': 'final_answer', ...}`)                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 #### `agent_tools.search_rag_knowledge_base`
 
@@ -766,30 +793,37 @@ PointStruct(
 
 ## 第3部: 動作シーケンス (Runtime Behavior)
 
-## 3.1 処理シーケンス図
-
-Streamlit UI、Gemini API、Agent Tools 間のインタラクション詳細です。
+### 9.4 シーケンス図 (Agent Turn)
 
 ```mermaid
 sequenceDiagram
-    participant UI as Agent Controller<br>(Streamlit)
-    participant LLM as 選択されたGeminiモデル
-    participant Tool as Agent Tools<br>(Search/RAG)
+    participant UI as Agent Chat Page<br>(Streamlit)
+    participant Svc as ReActAgent<br>(Service)
+    participant LLM as Gemini Model
+    participant Tool as Agent Tools
 
     Note over UI, LLM: Phase 1: ReAct Loop
-    UI->>LLM: send_message(ユーザー入力)
+    UI->>Svc: execute_turn(ユーザー入力)
+    Svc->>LLM: send_message(ユーザー入力)
     loop 解決するまで繰り返し
-        LLM-->>UI: 応答 (Text + FunctionCall?)
+        LLM-->>Svc: 応答 (Text + FunctionCall?)
         alt Function Call あり
-            UI->>UI: Thoughtをログ表示
-            UI->>Tool: ツール実行 (例: search_rag)
-            Tool-->>UI: 検索結果 (Observation)
-            UI->>LLM: send_message(function_response)
+            Svc-->>UI: yield Event(Thought/ToolCall)
+            Svc->>Tool: ツール実行 (例: search_rag)
+            Tool-->>Svc: 検索結果 (Observation)
+            Svc-->>UI: yield Event(ToolResult)
+            Svc->>LLM: send_message(function_response)
         else Function Call なし
-            LLM-->>UI: 回答案 (Draft Answer)
-            Note over UI: ループ終了 (break)
+            LLM-->>Svc: 回答案 (Draft Answer)
+            Note over Svc: ループ終了 (break)
         end
     end
+
+    Note over Svc, LLM: Phase 2: Reflection Loop
+    Svc->>LLM: send_message(Reflection Prompt)
+    LLM-->>Svc: 自己評価 & 最終回答
+    Svc-->>UI: yield Event(Reflection Log)
+    Svc-->>UI: yield Event(Final Answer)
 ```
 
 #### 主要構成要素
